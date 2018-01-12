@@ -1,10 +1,13 @@
-const Item = function(text){
+const Item = function(text=''){
   this.text = text;
 };
 
 Item.prototype = {
-  addText : function(text){
-    return this.text+=' '+text;
+  getText: function(){
+    return this.text;
+  },
+  addText : function(word){
+    return this.text+=' '+word;
   }
 };
 

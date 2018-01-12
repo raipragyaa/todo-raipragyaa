@@ -1,10 +1,14 @@
-const User = function(){
-  this.toDoList = [];
+const User = function(todoList){
+  this.toDoList = todoList;
+  this.toDoLists = {};
 };
 
 User.prototype = {
-  addToDoList: function(){
-      
+  addToDoList: function(listTitle){
+    return this.toDoLists[listTitle] = this.toDoList;
+  },
+  deleteList: function(listTitle){
+    return delete this.toDoLists[listTitle];
   }
 };
 

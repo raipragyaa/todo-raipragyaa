@@ -9,4 +9,8 @@ describe('testing Item',()=>{
       assert.equal(item.addText('item'),expected);
     })
   })
-})
+  it('should getText',()=>{
+    let expected = 'this is a';
+    assert.equal(item.getText(),expected);
+  })
+});
