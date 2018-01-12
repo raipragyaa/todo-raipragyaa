@@ -1,0 +1,22 @@
+{
+  "name": "todo-raipragyaa",
+  "version": "1.0.0",
+  "description": "## Objective",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STEP-tw/todo-raipragyaa.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STEP-tw/todo-raipragyaa/issues"
+  },
+  "homepage": "https://github.com/STEP-tw/todo-raipragyaa#readme",
+  "devDependencies": {
+    "chai": "^4.1.2"
+  }
+}
