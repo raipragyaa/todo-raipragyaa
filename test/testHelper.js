@@ -10,8 +10,8 @@ th.should_be_redirected_to = (res,location)=>{
 th.status_is_ok = (res)=>assert.equal(res.statusCode,200);
 th.content_type_is = (res,expected)=> assert.equal(res.headers['Content-Type'],expected);
 
-th.body_contains = (res,text)=> assert.isOk(res.body.include(text),`missing ${text}`);
-th.body_does_not_contain = (res,text)=> assert.isNotOk(res.body.include(text),`missing ${text}`);
+th.body_contains = (res,text)=> assert.isOk(res.body.includes(text),`missing ${text}`);
+th.body_does_not_contain = (res,text)=> assert.isNotOk(res.body.includes(text),`missing ${text}`);
 
 th.should_not_have_cookie = (res,name)=> {
   let cookieText = res.headers['Set-Cookie']||'';
