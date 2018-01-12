@@ -54,5 +54,13 @@ describe('app', () => {
         done();
       })
     })
+    it('serves the login page with message for a failed login',done=>{
+      request(app,{method:'GET',url:'/loginPage.html',headers:{'cookie':'message=login failed'}},res=>{
+        th.status_is_ok(res);
+        th.body_contains(res,'userName');
+        th.should_not_have_cookie(res,'message');
+        done();
+      })
+    })
   })
 })
