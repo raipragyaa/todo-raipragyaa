@@ -54,11 +54,29 @@ describe('app', () => {
         done();
       })
     })
-    it('serves the login page with message for a failed login',done=>{
-      request(app,{method:'GET',url:'/loginPage.html',headers:{'cookie':'message=login failed'}},res=>{
+    it('serves the login page with message for a failed login', done => {
+      request(app, {
+        method: 'GET',
+        url: '/loginPage.html',
+        headers: {
+          'cookie': 'message=login failed'
+        }
+      }, res => {
         th.status_is_ok(res);
-        th.body_contains(res,'userName');
-        th.should_not_have_cookie(res,'message');
+        th.body_contains(res, 'userName');
+        th.should_not_have_cookie(res, 'message');
+        done();
+      })
+    })
+  })
+  describe('GET /index.html', () => {
+    it('should be redirected to index page after logout', done => {
+      request(app, {
+        method: 'GET',
+        url: '/logout'
+      }, res => {
+        th.should_be_redirected_to(res, '/index.html');
+        th.should_have_cookie(res, 'sessionid','');
         done();
       })
     })
