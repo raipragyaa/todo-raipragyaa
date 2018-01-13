@@ -36,7 +36,7 @@ describe('app', () => {
       }, res => {
         th.status_is_ok(res);
         th.content_type_is(res, 'text/html');
-        th.body_contains(res, 'You can make your todo here');
+        th.body_contains(res, 'Welcome To To-Do Site');
         done();
       })
     })
