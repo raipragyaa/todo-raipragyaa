@@ -1,6 +1,6 @@
-
-#indexBody{
-  padding-left: 30%;
+#ih1{
+  color:blue;
+  text-align: center;
 }
 
 #hh1{
@@ -10,5 +10,29 @@
 
 #ht1{
   color:blue;
+  text-align: center;
+}
+
+#listImg{
+  float:right;
+}
+
+#dscpArea{
+  height:20px;
+  width:200px;
+}
+
+hr{
+  border-width: 5px;
+  border-color: blue;
+}
+
+#tdimg{
+  display: inline-block;
+  margin: 0px 38%;
+}
+#loginInstr{
+  display: inline-block;
+  margin: 0px 38%;
   text-align: center;
 }

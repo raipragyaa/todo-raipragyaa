@@ -10,10 +10,10 @@ Item.prototype = {
   addText: function(word) {
     return this.content += ' ' + word;
   },
-  markAsDone: function() {
+  done: function() {
     this.status = true;
   },
-  markAsNotDone: function(){
+  notDone: function(){
     this.status = false;
   }
 };

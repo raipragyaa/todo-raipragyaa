@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-let Item = require('../modelWork/item.js');
+let Item = require('../models/item.js');
 
 describe('testing Item',()=>{
   let item = new Item('this is a')
@@ -12,5 +12,13 @@ describe('testing Item',()=>{
   it('should getText',()=>{
     let expected = 'this is a';
     assert.equal(item.getContent(),expected);
+  })
+  it('should mark as done',()=>{
+    item.done();
+    assert.isOk(item.status);
+  })
+  it('should mark as undone',()=>{
+    item.notDone();
+    assert.isNotOk(item.status);
   })
 });

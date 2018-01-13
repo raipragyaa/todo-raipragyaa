@@ -13,8 +13,11 @@ ToDoList.prototype = {
   getDescription: function(){
     return this.description;
   },
-  addItem: function(itemCounter,content){
-    return this.items[itemCounter] = new Item(content);
+  addItem: function(itemNumber,content){
+    return this.items[itemNumber] = new Item(content);
   },
+  deleteItem: function(itemNumber){
+    return delete this.items[itemNumber];
+  }
 };
 module.exports = ToDoList;

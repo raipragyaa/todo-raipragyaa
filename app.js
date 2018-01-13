@@ -8,6 +8,7 @@ app.use(handlers.logRequest);
 app.get('/',handlers.serveIndexPage);
 app.post('/login',handlers.loginUser);
 app.get('/logout',handlers.logoutUser);
+app.post('/createList',handlers.redirectToToDoList);
 app.useAsPostProcessor(fileHandler.serveStaticFiles);
 
 module.exports = app;

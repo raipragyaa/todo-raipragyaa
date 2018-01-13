@@ -52,5 +52,9 @@ handlers.logoutUser = function(req, res) {
   res.redirect('/index.html');
 };
 
+handlers.redirectToToDoList = function(req,res){
+  res.redirect('/tdCreationPage.html');
+};
+
 
 module.exports = handlers;
