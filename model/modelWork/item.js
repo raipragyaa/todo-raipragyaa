@@ -1,13 +1,20 @@
-const Item = function(text=''){
-  this.text = text;
+const Item = function(content = '') {
+  this.content = content;
+  this.status = true;
 };
 
 Item.prototype = {
-  getText: function(){
-    return this.text;
+  getContent: function() {
+    return this.content;
   },
-  addText : function(word){
-    return this.text+=' '+word;
+  addText: function(word) {
+    return this.content += ' ' + word;
+  },
+  markAsDone: function() {
+    this.status = true;
+  },
+  markAsNotDone: function(){
+    this.status = false;
   }
 };
 

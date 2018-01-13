@@ -1,8 +1,8 @@
+let Item = require('./item.js');
 
-const ToDoList = function(title,description,item){
+const ToDoList = function(title,description){
   this.title = title;
   this.description = description;
-  this.item = item;
   this.items = {};
 };
 
@@ -13,8 +13,8 @@ ToDoList.prototype = {
   getDescription: function(){
     return this.description;
   },
-  addItem: function(itemCounter){
-    return this.items[itemCounter] = this.item;
+  addItem: function(itemCounter,content){
+    return this.items[itemCounter] = new Item(content);
   },
 };
 module.exports = ToDoList;

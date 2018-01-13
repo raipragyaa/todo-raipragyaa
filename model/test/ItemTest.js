@@ -11,6 +11,6 @@ describe('testing Item',()=>{
   })
   it('should getText',()=>{
     let expected = 'this is a';
-    assert.equal(item.getText(),expected);
+    assert.equal(item.getContent(),expected);
   })
 });
