@@ -5,6 +5,7 @@ const getContentType = function(filePath) {
     '.js': 'text/js',
     '.css': 'text/css',
     '.jpg': 'image/jpg',
+    '.png':'img/png',
     '.jpeg': 'image/jpeg',
     '.html': 'text/html',
     '.gif': 'image/gif',
