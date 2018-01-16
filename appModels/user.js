@@ -1,31 +1,34 @@
 let ToDoList = require('./toDoList.js');
 let Item = require('./item.js');
 
-const User = function(name){
+const User = function(name) {
   this.name = name;
   this.toDoLists = {};
+  this.listId = 0;
 };
 
 User.prototype = {
-  getName: function(){
+  getName: function() {
     return this.name;
   },
-  getToDo: function(){
+  getToDo: function() {
     return this.toDoLists;
   },
-  addToDoList: function(title,description){
-    return this.toDoLists[title] = new ToDoList(title,description) ;
+  addToDoList: function(title, description) {
+    this.toDoLists[this.listId] = new ToDoList(title, description);
+    console.log(this.listId,'========');
+    this.listId++;
   },
-  deleteList: function(title){
-    return delete this.toDoLists[title];
+  deleteList: function(listId) {
+    return delete this.toDoLists[listId];
   },
-  markAsDone: function(content){
+  markAsDone: function(content) {
     let item = new Item(content);
-    item.done();
+    return item.done();
   },
-  markAsNotDone: function(content){
+  markAsNotDone: function(content) {
     let item = new Item(content)
-    item.notDone();
+    return item.notDone();
   }
 };
 

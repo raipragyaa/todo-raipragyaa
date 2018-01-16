@@ -3,49 +3,53 @@ let User = require('../appModels/user.js');
 let ToDoList = require('../appModels/toDoList.js');
 
 describe('testing User', () => {
-  let pragya = new User('pragya');
   describe('User properties', () => {
+    let pragya = new User('pragya');
     it('should have name', () => {
       let expected = 'pragya';
       assert.equal(pragya.name, 'pragya')
     })
-    it('should have toDoList', () => {
+    it('should have one toDoList', () => {
       pragya.addToDoList('todoforWork', 'Important');
+      console.log(pragya);
       let expected = {
-        todoforWork: new ToDoList('todoforWork', 'Important')
+        0 : new ToDoList('todoforWork', 'Important')
       }
-      assert.deepInclude(pragya.getToDo(), expected);
+      assert.deepEqual(pragya.getToDo(), expected);
     })
-    it('should have todo list', () => {
-      pragya.addToDoList('todoforWork', 'Important');
-      pragya.addToDoList('todoforHome', 'veryImp');
+    it('should have two todo lists', () => {
+      let priya = new User('priya');
+      priya.addToDoList('to', 'rtant');
+      priya.addToDoList('todoforHome', 'veryImp');
       let expected = {
-        todoforWork: new ToDoList('todoforWork', 'Important'),
-        todoforHome: new ToDoList('todoforHome', 'veryImp')
+        0 : new ToDoList('to', 'rtant'),
+        1 : new ToDoList('todoforHome', 'veryImp')
       }
-      assert.deepInclude(pragya.getToDo(), expected);
+      assert.deepEqual(priya.getToDo(), expected);
     })
   })
   describe('User behaviours', () => {
     it('should add toDoList', () => {
+      let sayima = new User('Sayima');
       let title = 'todo';
       let description = 'for work';
-      pragya.addToDoList(title, description);
+      sayima.addToDoList(title, description);
       let expected = {
-        todo: new ToDoList(title, description)
+        0 : new ToDoList(title, description)
       }
-      assert.deepInclude(pragya.toDoLists, expected);
+      assert.deepInclude(sayima.getToDo(), expected);
     })
   })
   it('should delete toDoList', () => {
+    let arvind = new User('arvind');
     let title = 'todo';
     let description = 'for work';
-    pragya.addToDoList(title, description);
+    arvind.addToDoList(title, description);
     let expected = {
-      todo: new ToDoList(title, description)
+      0 : new ToDoList(title, description)
     };
-    assert.deepInclude(pragya.toDoLists, expected);
-    pragya.deleteList(title);
-    assert.deepInclude(pragya.todoLists, {});
+    assert.deepInclude(arvind.getToDo(), expected);
+    arvind.deleteList(0);
+    assert.deepInclude(arvind.todoLists, {});
   })
 });
