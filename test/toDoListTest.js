@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
-let ToDoList = require('../models/toDoList.js');
-let Item = require('../models/item.js');
+let ToDoList = require('../appModels/toDoList.js');
+let Item = require('../appModels/item.js');
 
 describe('testing toDoList', () => {
   describe('todo list Properties', () => {
@@ -18,17 +18,17 @@ describe('testing toDoList', () => {
   describe('todo list behaviour', () => {
     it('should add item', () => {
       let toDoList = new ToDoList('To Do for work', undefined);
-      toDoList.addItem('1', 'goodBye');
+      toDoList.addItem('goodBye');
       let expected = {
-        1: new Item('goodBye')
+        0: new Item('goodBye')
       };
       assert.deepInclude(toDoList.items, expected);
     })
     it('should delet item',()=>{
       let toDoList = new ToDoList('To Do for work', 'good');
-      toDoList.addItem('1', 'goodBye');
+      toDoList.addItem('goodBye');
       let expected = {
-        1: new Item('goodBye')
+        0 : new Item('goodBye')
       };
       assert.deepInclude(toDoList.items, expected);
       toDoList.deleteItem('1');

@@ -6,11 +6,15 @@
     <link rel="stylesheet" href="./style/style.css">
   </head>
   <body>
-    <a href="homePage.html"> << Go to Home</a>
-    <h1 id="ht1" >Write Your To-Do here</h1>
+    <a href="homePage"> << Go to Home</a>
+    <h1 id="ht1" >Write Your To-Do Here</h1>
     <a href="logout"> <button type="button">Logout</button> </a>
     <div id="listImg">
       <img src="img/thingstoDo.png" >
+    </div>
+    <p>Title:title of list</p>
+    <p>Description: list description</p>
+    <div id="toDoList">
     </div>
   </body>
 </html>

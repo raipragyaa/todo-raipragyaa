@@ -1,16 +1,17 @@
 const fs = require('fs');
 const getContentType = function(filePath) {
-  let fileExtention = filePath.slice(filePath.lastIndexOf('.'));
+  let fileExtention = filePath.split('.')[1]||"";
   let headers = {
-    '.js': 'text/js',
-    '.css': 'text/css',
-    '.jpg': 'image/jpg',
-    '.png':'img/png',
-    '.jpeg': 'image/jpeg',
-    '.html': 'text/html',
-    '.gif': 'image/gif',
-    '.pdf': 'text/pdf',
-    '.ico': 'text/plain'
+    '':'text/html',
+    'js': 'text/js',
+    'css': 'text/css',
+    'jpg': 'image/jpg',
+    'png':'img/png',
+    'jpeg': 'image/jpeg',
+    'html': 'text/html',
+    'gif': 'image/gif',
+    'pdf': 'text/pdf',
+    'ico': 'text/plain'
   }
   return headers[fileExtention];
 };

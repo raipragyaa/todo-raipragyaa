@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1 id="hh1">Welcome To HomePage</h1>
-    <a href="logout"> <button type="button">Logout</button></a></br></br>
+    <a href="/logout"> <button type="button">Logout</button></a></br></br>
     <div id="creationSpace">
       <h2>Create New list</h2>
       <form  action="createList" method="post">

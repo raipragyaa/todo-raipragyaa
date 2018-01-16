@@ -17,22 +17,22 @@ describe('app', () => {
     })
   })
   describe('GET /', () => {
-    it('redirects to index.html', done => {
+    it('redirects to index', done => {
       request(app, {
         method: 'GET',
         url: '/'
       }, (res) => {
-        th.should_be_redirected_to(res, './index.html');
+        th.should_be_redirected_to(res, './index');
         assert.equal(res.body, "");
         done();
       })
     })
   })
-  describe('GET /index.html', () => {
+  describe('GET /index', () => {
     it('gives the index page', done => {
       request(app, {
         method: 'GET',
-        url: '/index.html'
+        url: '/index'
       }, res => {
         th.status_is_ok(res);
         th.content_type_is(res, 'text/html');
@@ -41,11 +41,11 @@ describe('app', () => {
       })
     })
   })
-  describe('GET /loginPage.html', () => {
+  describe('GET /login', () => {
     it('serves the login page', done => {
       request(app, {
         method: 'GET',
-        url: '/loginPage.html'
+        url: '/login'
       }, res => {
         th.status_is_ok(res);
         th.body_contains(res, 'userName');
@@ -57,7 +57,7 @@ describe('app', () => {
     it('serves the login page with message for a failed login', done => {
       request(app, {
         method: 'GET',
-        url: '/loginPage.html',
+        url: '/login',
         headers: {
           'cookie': 'message=login failed'
         }
@@ -75,7 +75,7 @@ describe('app', () => {
         method: 'GET',
         url: '/logout'
       }, res => {
-        th.should_be_redirected_to(res, '/index.html');
+        th.should_be_redirected_to(res, '/index');
         th.should_have_cookie(res, 'sessionid','');
         done();
       })

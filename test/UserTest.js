@@ -1,6 +1,6 @@
 let assert = require('chai').assert;
-let User = require('../models/user.js');
-let ToDoList = require('../models/toDoList.js');
+let User = require('../appModels/user.js');
+let ToDoList = require('../appModels/toDoList.js');
 
 describe('testing User', () => {
   let pragya = new User('pragya');

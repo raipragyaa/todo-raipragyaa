@@ -12,7 +12,7 @@
     </div>
     <div id="loginInstr">
       <h2>First Login To Use This App</h2>
-      <a href="loginPage.html"> <button type="button" name="button">clickToLogin</button></a>
+      <a href="login"> <button type="button" name="button">clickToLogin</button></a>
     </div>
   </body>
 </html>

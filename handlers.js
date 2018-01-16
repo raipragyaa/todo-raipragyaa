@@ -23,7 +23,7 @@ handlers.logRequest = function(req, res) {
 };
 
 handlers.serveIndexPage = function(req, res) {
-  res.redirect('./index.html');
+  res.redirect('./index');
 };
 
 handlers.loadUser = function(req, res) {
@@ -38,22 +38,22 @@ handlers.loginUser = function(req, res) {
   let user = registeredUsers.find(u => u.userName == req.body.userName);
   if (!user) {
     res.setHeader('Set-Cookie', 'message=login failed; Max-Age=5');
-    res.redirect('./loginPage.html');
+    res.redirect('./login');
     return;
   }
   let sessionid = new Date().getTime();
   res.setHeader('Set-Cookie', `sessionid=${sessionid}`);
   user.sessionid = sessionid;
-  res.redirect('./HomePage.html');
+  res.redirect('./HomePage');
 };
 
 handlers.logoutUser = function(req, res) {
   res.setHeader('Set-Cookie', `sessionid=; Max-Age=0"`)
-  res.redirect('/index.html');
+  res.redirect('/index');
 };
 
 handlers.redirectToToDoList = function(req,res){
-  res.redirect('/tdCreationPage.html');
+  res.redirect('/tdCreationPage');
 };
 
 

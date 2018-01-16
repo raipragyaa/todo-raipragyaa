@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-let Item = require('../models/item.js');
+let Item = require('../appModels/item.js');
 
 describe('testing Item',()=>{
   let item = new Item('this is a')
