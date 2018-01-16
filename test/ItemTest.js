@@ -9,7 +9,7 @@ describe('testing Item',()=>{
       assert.equal(item.addText('item'),expected);
     })
   })
-  it('should getText',()=>{
+  it('should get Contents',()=>{
     let expected = 'this is a';
     assert.equal(item.getContent(),expected);
   })

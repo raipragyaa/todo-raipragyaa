@@ -1,23 +1,23 @@
 const assert = require('chai').assert;
-let ToDoList = require('../appModels/toDoList.js');
+let ToDo = require('../appModels/toDo.js');
 let Item = require('../appModels/item.js');
 
 describe('testing toDoList', () => {
   describe('todo list Properties', () => {
     it('should give title', () => {
-      let toDoList = new ToDoList('To Do for work', undefined, undefined);
+      let toDoList = new ToDo('To Do for work', undefined, undefined);
       let expected = 'To Do for work';
       assert.equal(toDoList.getTitle(), expected);
     })
     it('should give description', () => {
-      let toDoList = new ToDoList(undefined, 'this is a ToDo', undefined);
+      let toDoList = new ToDo(undefined, 'this is a ToDo', undefined);
       let expected = 'this is a ToDo';
       assert.equal(toDoList.getDescription(), expected);
     })
   })
   describe('todo list behaviour', () => {
     it('should add item', () => {
-      let toDoList = new ToDoList('To Do for work', undefined);
+      let toDoList = new ToDo('To Do for work', undefined);
       toDoList.addItem('goodBye');
       let expected = {
         0: new Item('goodBye')
@@ -25,7 +25,7 @@ describe('testing toDoList', () => {
       assert.deepInclude(toDoList.items, expected);
     })
     it('should delet item', () => {
-      let toDoList = new ToDoList('To Do for work', 'good');
+      let toDoList = new ToDo('To Do for work', 'good');
       toDoList.addItem('goodBye');
       let expected = {
         0: new Item('goodBye')
@@ -36,19 +36,19 @@ describe('testing toDoList', () => {
     })
   })
   it('can mark a item done', () => {
-    let toDoList = new ToDoList('To Do for work', 'good');
+    let toDoList = new ToDo('To Do for work', 'good');
     toDoList.addItem('This is important');
     toDoList.markDone(0);
     assert(toDoList.items[0].status);
   })
   it('can mark a item as not done', () => {
-    let toDoList = new ToDoList('To Do for work', 'good');
+    let toDoList = new ToDo('To Do for work', 'good');
     toDoList.addItem('This is important');
     toDoList.markAsNotDone(0);
     assert.isNotOk(toDoList.items[0].status);
   })
   it('item can be edited', () => {
-    let myToDo = new ToDoList('To Do for work', 'good');
+    let myToDo = new ToDo('To Do for work', 'good');
     myToDo.addItem('I have to complete toDo App');
     let expected = new Item('I have to complete toDo App');
     assert.deepEqual(myToDo.getItem(0), expected);
