@@ -47,4 +47,13 @@ describe('testing toDoList', () => {
     toDoList.markAsNotDone(0);
     assert.isNotOk(toDoList.items[0].status);
   })
+  it('item can be edited', () => {
+    let myToDo = new ToDoList('To Do for work', 'good');
+    myToDo.addItem('I have to complete toDo App');
+    let expected = new Item('I have to complete toDo App');
+    assert.deepEqual(myToDo.getItem(0), expected);
+    myToDo.editItem(0, 'I have completed login feature');
+    expected = new Item('I have completed login feature');
+    assert.deepEqual(myToDo.items[0], expected.content);
+  })
 });

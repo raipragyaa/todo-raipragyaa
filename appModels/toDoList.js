@@ -22,6 +22,9 @@ ToDoList.prototype = {
   deleteItem: function(itemNumber) {
     return delete this.items[itemNumber];
   },
+  getItem: function(itemId){
+    return this.items[itemId];
+  },
   markDone:function(itemId){
     let item = this.items[itemId];
     return item.done();
@@ -29,6 +32,10 @@ ToDoList.prototype = {
   markAsNotDone: function(itemId){
     let item = this.items[itemId];
     return item.notDone();
+  },
+  editItem: function(itemId,newContent){
+    this.items[itemId] = newContent;
+    return this.items;
   }
 };
 module.exports = ToDoList;
