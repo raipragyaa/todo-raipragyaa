@@ -21,6 +21,14 @@ ToDoList.prototype = {
   },
   deleteItem: function(itemNumber) {
     return delete this.items[itemNumber];
+  },
+  markDone:function(itemId){
+    let item = this.items[itemId];
+    return item.done();
+  },
+  markAsNotDone: function(itemId){
+    let item = this.items[itemId];
+    return item.notDone();
   }
 };
 module.exports = ToDoList;

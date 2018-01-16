@@ -24,15 +24,27 @@ describe('testing toDoList', () => {
       };
       assert.deepInclude(toDoList.items, expected);
     })
-    it('should delet item',()=>{
+    it('should delet item', () => {
       let toDoList = new ToDoList('To Do for work', 'good');
       toDoList.addItem('goodBye');
       let expected = {
-        0 : new Item('goodBye')
+        0: new Item('goodBye')
       };
       assert.deepInclude(toDoList.items, expected);
       toDoList.deleteItem('1');
-      assert.deepInclude(toDoList.items,{});
+      assert.deepInclude(toDoList.items, {});
     })
+  })
+  it('can mark a item done', () => {
+    let toDoList = new ToDoList('To Do for work', 'good');
+    toDoList.addItem('This is important');
+    toDoList.markDone(0);
+    assert(toDoList.items[0].status);
+  })
+  it('can mark a item as not done', () => {
+    let toDoList = new ToDoList('To Do for work', 'good');
+    toDoList.addItem('This is important');
+    toDoList.markAsNotDone(0);
+    assert.isNotOk(toDoList.items[0].status);
   })
 });

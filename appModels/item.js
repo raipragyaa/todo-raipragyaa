@@ -11,10 +11,10 @@ Item.prototype = {
     return this.content += ' ' + word;
   },
   done: function() {
-    this.status = true;
+    return this.status ;
   },
   notDone: function(){
-    this.status = false;
+    return this.status = false;
   }
 };
 
