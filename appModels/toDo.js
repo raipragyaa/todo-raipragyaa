@@ -18,22 +18,22 @@ ToDo.prototype = {
     this.items[this.itemKey] = new Item(content);
     this.itemKey++;
   },
-  deleteItem: function(itemNumber) {
-    return delete this.items[itemNumber];
+  deleteItem: function(itemKey) {
+    return delete this.items[itemKey];
   },
-  getItem: function(itemId) {
-    return this.items[itemId];
+  getItem: function(itemKey) {
+    return this.items[itemKey];
   },
-  markDone: function(itemId) {
-    let item = this.items[itemId];
+  markDone: function(itemKey) {
+    let item = this.items[itemKey];
     return item.done();
   },
-  markAsNotDone: function(itemId) {
-    let item = this.items[itemId];
+  markAsNotDone: function(itemKey) {
+    let item = this.items[itemKey];
     return item.notDone();
   },
-  editItem: function(itemId, newContent) {
-    this.items[itemId] = newContent;
+  editItem: function(itemKey, newContent) {
+    this.items[itemKey] = newContent;
     return this.items;
   },
   changeTitle: function(newTitle) {

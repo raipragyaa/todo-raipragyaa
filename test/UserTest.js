@@ -70,4 +70,46 @@ describe('testing User', () => {
       assert.equal(joy.getToDo(0).description,'some works done');
     })
   })
+  describe('user can add item',()=>{
+    it('user can add a item in a todo',()=>{
+      let sulagna = new User('sulagna');
+      let title = 'home';
+      let description = 'many works to do';
+      sulagna.addToDo(title,description);
+      sulagna.addItems(0,'first write your thoughts on paper')
+      assert.equal(sulagna.getItem(0,0).content,'first write your thoughts on paper' );
+    })
+  })
+  describe('user can edit item',()=>{
+    it('user can edit a item in a todo',()=>{
+      let sulagna = new User('sulagna');
+      let title = 'home';
+      let description = 'many works to do';
+      sulagna.addToDo(title,description);
+      sulagna.addItems(0,'first write your thoughts on paper')
+      assert.equal(sulagna.getItem(0,0).content,'first write your thoughts on paper' );
+      sulagna.editItem(0,0,'I have completed some features');
+      assert.equal(sulagna.getItem(0,0),'I have completed some features');
+    })
+  })
+  describe('user can mark items',()=>{
+    it('user can mark a item as done',()=>{
+      let sulagna = new User('sulagna');
+      let title = 'home';
+      let description = 'many works to do';
+      sulagna.addToDo(title,description);
+      sulagna.addItems(0,'first write your thoughts on paper');
+      sulagna.markItemDone(0,0);
+      assert.isOk(sulagna.getItem(0,0).status);
+    })
+    it('user can mark a item as not done',()=>{
+      let sulagna = new User('sulagna');
+      let title = 'home';
+      let description = 'many works to do';
+      sulagna.addToDo(title,description);
+      sulagna.addItems(0,'first write your thoughts on paper');
+      sulagna.markItemNotDone(0,0);
+      assert.isNotOk(sulagna.getItem(0,0).status);
+    })
+  })
 });
