@@ -34,7 +34,7 @@ describe('app', () => {
         method: 'GET',
         url: '/home'
       }, res => {
-        th.should_be_redirected_to(res, '/index');
+        th.should_be_redirected_to(res, '/');
         th.should_not_have_cookie(res, 'sessionid', '');
         done();
       })
@@ -46,7 +46,7 @@ describe('app', () => {
         method: 'GET',
         url: '/todoCreation'
       }, res => {
-        th.should_be_redirected_to(res, '/index');
+        th.should_be_redirected_to(res, '/');
         th.should_not_have_cookie(res, 'sessionid', '');
         done();
       })
@@ -56,7 +56,7 @@ describe('app', () => {
     it('gives the index page', done => {
       request(app, {
         method: 'GET',
-        url: '/index'
+        url: '/'
       }, res => {
         th.status_is_ok(res);
         th.content_type_is(res, 'text/html');
@@ -99,7 +99,7 @@ describe('app', () => {
         method: 'GET',
         url: '/logout'
       }, res => {
-        th.should_be_redirected_to(res, '/index');
+        th.should_be_redirected_to(res, '/');
         th.should_have_cookie(res, 'sessionid', '');
         done();
       })
