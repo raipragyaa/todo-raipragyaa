@@ -3,13 +3,8 @@ let handlers = {};
 
 let toS = o => JSON.stringify(o, null, 2);
 
-const registeredUsers = [{
-  userName: 'pragya',
-  name: 'Pragya Rai'
-}, {
-  userName: 'priya',
-  name: 'Priya Rai'
-}];
+const registeredUsers = JSON.parse(fs.readFileSync('./database/userData.json'));
+
 
 handlers.logRequest = function(req, res) {
   let text = ['------------------------------',
@@ -44,7 +39,7 @@ handlers.loginUser = function(req, res) {
   let sessionid = new Date().getTime();
   res.setHeader('Set-Cookie', `sessionid=${sessionid}`);
   user.sessionid = sessionid;
-  res.redirect('./HomePage');
+  res.redirect('./home');
 };
 
 handlers.logoutUser = function(req, res) {
@@ -53,7 +48,7 @@ handlers.logoutUser = function(req, res) {
 };
 
 handlers.redirectToToDoList = function(req,res){
-  res.redirect('/tdCreationPage');
+  res.redirect('/todoCreation');
 };
 
 

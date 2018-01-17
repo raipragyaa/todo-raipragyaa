@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./style/style.css">
   </head>
   <body>
-    <a href="homePage"> << Go to Home</a>
+    <a href="home"> << Go to Home</a>
     <h1 id="ht1" >Write Your To-Do Here</h1>
     <a href="logout"> <button type="button">Logout</button> </a>
     <div id="listImg">
