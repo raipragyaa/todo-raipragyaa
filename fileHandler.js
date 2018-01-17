@@ -1,8 +1,9 @@
 const fs = require('fs');
+
 const getContentType = function(filePath) {
   let fileExtention = filePath.split('.')[1]||"";
   let headers = {
-    '':'text/html',
+    'html':'text/html',
     'js': 'text/js',
     'css': 'text/css',
     'jpg': 'image/jpg',
@@ -23,16 +24,19 @@ const respondOnSourceNotFound = function(req, res) {
 };
 
 const serveStaticFiles = function(req, res) {
+  if(req.url=='/'){
+    req.url='/index.html'
+  }
   let filePath = 'public' + req.url;
   let headers = getContentType(filePath);
   fs.readFile(filePath, (err, data) => {
     if (err) return respondOnSourceNotFound(req, res);
+    res.statusCode = 200;
     res.setHeader('Content-Type', headers);
-    if (req.cookies.message)
-      res.write('Login Failed');
     res.write(data);
     res.end();
   })
 };
+
 
 exports.serveStaticFiles = serveStaticFiles;

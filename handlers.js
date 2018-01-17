@@ -1,4 +1,5 @@
 const fs = require('fs');
+
 let handlers = {};
 
 let toS = o => JSON.stringify(o, null, 2);
@@ -17,9 +18,6 @@ handlers.logRequest = function(req, res) {
   console.log(`${req.method} ${req.url}`);
 };
 
-handlers.serveIndexPage = function(req, res) {
-  res.redirect('./index');
-};
 
 handlers.loadUser = function(req, res) {
   let sessionid = req.cookies.sessionid;
@@ -33,22 +31,45 @@ handlers.loginUser = function(req, res) {
   let user = registeredUsers.find(u => u.userName == req.body.userName);
   if (!user) {
     res.setHeader('Set-Cookie', 'message=login failed; Max-Age=5');
-    res.redirect('./login');
+    res.redirect('/login');
     return;
   }
   let sessionid = new Date().getTime();
   res.setHeader('Set-Cookie', `sessionid=${sessionid}`);
   user.sessionid = sessionid;
-  res.redirect('./home');
+  res.redirect('/home');
+};
+
+handlers.serveIndexIfNotLoggedIn = function(req, res) {
+  if (req.urlIsOneOf(['/home', '/todoCreation', '/toDos']) && !req.user) {
+    res.redirect('/');
+  }
+};
+
+handlers.serveLoginPage = function(req, res) {
+  let contents = fs.readFileSync('public/login.html', 'utf8');
+  if (req.cookies.message) {
+    contents += 'Login Failed';
+  }
+  res.write(contents);
+  res.end();
+};
+
+handlers.serveHome = function(req, res) {
+  let contents = fs.readFileSync('public/home.html','utf8');
+  res.write(contents);
+  res.end();
 };
 
 handlers.logoutUser = function(req, res) {
   res.setHeader('Set-Cookie', `sessionid=; Max-Age=0"`)
-  res.redirect('/index');
+  res.redirect('/');
 };
 
-handlers.redirectToToDoList = function(req,res){
-  res.redirect('/todoCreation');
+handlers.serveToDoCreationPage= function(req, res) {
+  let contents = fs.readFileSync('public/toDoCreation.html');
+  res.write(contents);
+  res.end();
 };
 
 

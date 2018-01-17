@@ -52,11 +52,11 @@ const post = function(url, handler) {
   this._handlers.POST[url] = handler;
 };
 
-const use = function(handler) {
+const preprocessor = function(handler) {
   this._preprocess.push(handler);
 };
 
-const useAsPostProcessor = function(handler){
+const postprocessor = function(handler){
   this._postprocess.push(handler);
 };
 
@@ -93,8 +93,8 @@ let create = () => {
   initialize.call(rh);
   rh.get = get;
   rh.post = post;
-  rh.use = use;
-  rh.useAsPostProcessor = useAsPostProcessor;
+  rh.preprocessor = preprocessor;
+  rh.postprocessor = postprocessor;
   return rh;
 }
 exports.create = create;

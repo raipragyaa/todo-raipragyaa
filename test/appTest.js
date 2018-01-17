@@ -17,13 +17,37 @@ describe('app', () => {
     })
   })
   describe('GET /', () => {
-    it('redirects to index', done => {
+    it('serve index', done => {
       request(app, {
         method: 'GET',
         url: '/'
       }, (res) => {
-        th.should_be_redirected_to(res, './index');
-        assert.equal(res.body, "");
+        assert.equal(res.statusCode, 200);
+        th.body_contains(res, 'Welcome To To-Do Site');
+        done();
+      })
+    })
+  })
+  describe('GET /home', () => {
+    it('should be redirected to index page if user is not loggedIn', done => {
+      request(app, {
+        method: 'GET',
+        url: '/home'
+      }, res => {
+        th.should_be_redirected_to(res, '/index');
+        th.should_not_have_cookie(res, 'sessionid', '');
+        done();
+      })
+    })
+  })
+  describe('GET /todoCreation', () => {
+    it('should be redirected to index page if user is not loggedIn', done => {
+      request(app, {
+        method: 'GET',
+        url: '/todoCreation'
+      }, res => {
+        th.should_be_redirected_to(res, '/index');
+        th.should_not_have_cookie(res, 'sessionid', '');
         done();
       })
     })
@@ -69,14 +93,14 @@ describe('app', () => {
       })
     })
   })
-  describe('GET /index.html', () => {
+  describe('GET /index', () => {
     it('should be redirected to index page after logout', done => {
       request(app, {
         method: 'GET',
         url: '/logout'
       }, res => {
         th.should_be_redirected_to(res, '/index');
-        th.should_have_cookie(res, 'sessionid','');
+        th.should_have_cookie(res, 'sessionid', '');
         done();
       })
     })

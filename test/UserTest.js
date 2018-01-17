@@ -39,7 +39,7 @@ describe('testing User', () => {
       let expected = {
         0: new ToDo(title, description)
       }
-      assert.deepInclude(sayima.getToDos(), expected);
+      assert.deepEqual(sayima.getToDos(), expected);
     })
   })
   it('should delete toDoList', () => {
@@ -50,9 +50,9 @@ describe('testing User', () => {
     let expected = {
       0: new ToDo(title, description)
     };
-    assert.deepInclude(arvind.getToDos(), expected);
+    assert.deepEqual(arvind.getToDos(), expected);
     arvind.deleteList(0);
-    assert.deepInclude(arvind.todoLists, {});
+    assert.deepEqual(arvind.getToDos(), {});
   })
   describe('user can edit',()=>{
     let joy = new User('joy');
