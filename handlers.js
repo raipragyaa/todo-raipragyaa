@@ -1,11 +1,16 @@
 const fs = require('fs');
 
+const User = require('./appModels/user.js');
+
+let newUser = new User('pragya');
+
+const database = [];
+
 let handlers = {};
 
 let toS = o => JSON.stringify(o, null, 2);
 
 const registeredUsers = JSON.parse(fs.readFileSync('./database/userData.json'));
-
 
 handlers.logRequest = function(req, res) {
   let text = ['------------------------------',
@@ -25,10 +30,18 @@ handlers.loadUser = function(req, res) {
   if (sessionid && user) {
     req.user = user;
   }
+  return;
+};
+
+handlers.serveHome = function(req, res) {
+  let contents = fs.readFileSync('public/home.html','utf8');
+  res.write(contents);
+  res.end();
 };
 
 handlers.loginUser = function(req, res) {
-  let user = registeredUsers.find(u => u.userName == req.body.userName);
+  let userName = newUser.getName();
+  let user = registeredUsers.find(u => u.userName == userName);
   if (!user) {
     res.setHeader('Set-Cookie', 'message=login failed; Max-Age=5');
     res.redirect('/login');
@@ -55,22 +68,25 @@ handlers.serveLoginPage = function(req, res) {
   res.end();
 };
 
-handlers.serveHome = function(req, res) {
-  let contents = fs.readFileSync('public/home.html','utf8');
-  res.write(contents);
-  res.end();
-};
-
 handlers.logoutUser = function(req, res) {
   res.setHeader('Set-Cookie', `sessionid=; Max-Age=0"`)
   res.redirect('/');
 };
 
+let addToDo = function(req){
+  let title = req.body.title;
+  let description = req.body.description;
+  newUser.addToDo(title,description);
+  console.log(newUser);
+};
+
 handlers.serveToDoCreationPage= function(req, res) {
   let contents = fs.readFileSync('public/toDoCreation.html');
+  addToDo(req);
   res.write(contents);
   res.end();
 };
+
 
 
 module.exports = handlers;
