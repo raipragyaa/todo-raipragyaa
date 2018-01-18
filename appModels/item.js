@@ -1,6 +1,6 @@
 const Item = function(content = '') {
   this.content = content;
-  this.status = true;
+  this.status = false;
 };
 
 Item.prototype = {
@@ -8,10 +8,10 @@ Item.prototype = {
     return this.content;
   },
   done: function() {
-    return this.status ;
+    return this.status = true ;
   },
   notDone: function(){
-    return this.status = false;
+    return this.status;
   }
 };
 

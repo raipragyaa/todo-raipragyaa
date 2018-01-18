@@ -14,6 +14,9 @@ User.prototype = {
   getToDos: function() {
     return this.toDos;
   },
+  getToDo: function(toDoKey){
+    return this.ToDos[toDoKey];
+  },
   getToDoKey: function(){
     return this.toDoKey - 1;
   },

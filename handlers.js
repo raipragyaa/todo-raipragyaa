@@ -4,8 +4,6 @@ const User = require('./appModels/user.js');
 
 let newUser = new User('pragya');
 
-const database = [];
-
 let handlers = {};
 
 let toS = o => JSON.stringify(o, null, 2);
@@ -35,6 +33,8 @@ handlers.loadUser = function(req, res) {
 
 handlers.serveHome = function(req, res) {
   let contents = fs.readFileSync('public/home.html', 'utf8');
+  let userName = newUser.getName();
+  contents = contents.replace('Name', userName);
   res.write(contents);
   res.end();
 };
@@ -77,7 +77,6 @@ let addToDo = function(req) {
   let title = req.body.title;
   let description = req.body.description;
   newUser.addToDo(title, description);
-  console.log(newUser);
 };
 
 handlers.serveToDoCreationPage = function(req, res) {
@@ -89,26 +88,28 @@ handlers.serveToDoCreationPage = function(req, res) {
   res.end();
 };
 
-let handleItems = function(req) {
-
-}
-
-let addItems = function(req) {
+let addItem = function(req) {
   let items = req.body.item;
   let toDoKey = newUser.getToDoKey();
   if (Array.isArray(items)) {
     items.forEach(item => {
       newUser.addItems(toDoKey, item);
-      return;
     })
+    return;
   }
   newUser.addItems(toDoKey, items)
 };
 
-handlers.redirectHomeAferSavingTd = function(req, res) {
-  addItems(req);
+handlers.redirectHomeAfterSavingTodo = function(req, res) {
+  addItem(req);
+  storeToDos();
   res.redirect('/home');
-}
+};
 
+let storeToDos = function(req, res) {
+  let userContents = JSON.stringify(newUser, null, 2);
+  fs.writeFileSync('./database/todo.json', userContents);
+  return;
+};
 
 module.exports = handlers;
