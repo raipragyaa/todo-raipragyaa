@@ -81,7 +81,9 @@ let addToDo = function(req){
 };
 
 handlers.serveToDoCreationPage= function(req, res) {
-  let contents = fs.readFileSync('public/toDoCreation.html');
+  let contents = fs.readFileSync('public/toDoCreation.html','utf8');
+  contents = contents.replace('title of list',req.body.title);
+  contents = contents.replace('toDo description',req.body.description);
   addToDo(req);
   res.write(contents);
   res.end();
