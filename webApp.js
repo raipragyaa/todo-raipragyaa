@@ -1,3 +1,5 @@
+const qs = require('querystring');
+
 const toKeyValue = kv => {
   let parts = kv.split('=');
   return {
@@ -11,7 +13,6 @@ const accumulate = (o, kv) => {
   return o;
 };
 
-const parseBody = text => text && text.split('&').map(toKeyValue).reduce(accumulate, {}) || {};
 
 let redirect = function(path) {
   console.log(`redirecting to ${path}`);
@@ -71,7 +72,7 @@ const main = function(req, res) {
   let content = "";
   req.on('data', data => content += data.toString())
   req.on('end', () => {
-    req.body = parseBody(content);
+    req.body = qs.parse(content);
     content = "";
     this._preprocess.forEach(middleware => {
       if (res.finished) return;

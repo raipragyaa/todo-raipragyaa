@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>To DO Page</title>
     <link rel="stylesheet" href="./style/style.css">
+    <script src="./js/toDoCreation.js" charset="utf-8"></script>
   </head>
   <body>
     <a href="home"> << Go to Home</a>
@@ -14,7 +15,13 @@
     </div>
     <p>Title:title of list</p>
     <p>Description: toDo description</p>
-    <div id="toDoList">
+    <div >
+      <form  action="saveToDo" method="post">
+        <ol id="itemsBlock">
+        </ol>
+        <button type="button" onclick="createInputField()">add item</button>
+        <input type="submit" value="save">
+      </form>
     </div>
   </body>
 </html>

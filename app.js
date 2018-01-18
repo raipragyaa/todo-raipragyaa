@@ -13,6 +13,7 @@ app.post('/login',handlers.loginUser);
 app.get('/login',handlers.serveLoginPage);
 app.get('/home',handlers.serveHome);
 app.post('/createList',handlers.serveToDoCreationPage);
+app.post('/saveToDo',handlers.redirectHomeAferSavingTd);
 app.get('/logout',handlers.logoutUser);
 
 // ========================================================

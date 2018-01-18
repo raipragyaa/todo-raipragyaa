@@ -34,7 +34,7 @@ handlers.loadUser = function(req, res) {
 };
 
 handlers.serveHome = function(req, res) {
-  let contents = fs.readFileSync('public/home.html','utf8');
+  let contents = fs.readFileSync('public/home.html', 'utf8');
   res.write(contents);
   res.end();
 };
@@ -73,22 +73,42 @@ handlers.logoutUser = function(req, res) {
   res.redirect('/');
 };
 
-let addToDo = function(req){
+let addToDo = function(req) {
   let title = req.body.title;
   let description = req.body.description;
-  newUser.addToDo(title,description);
+  newUser.addToDo(title, description);
   console.log(newUser);
 };
 
-handlers.serveToDoCreationPage= function(req, res) {
-  let contents = fs.readFileSync('public/toDoCreation.html','utf8');
-  contents = contents.replace('title of list',req.body.title);
-  contents = contents.replace('toDo description',req.body.description);
+handlers.serveToDoCreationPage = function(req, res) {
+  let contents = fs.readFileSync('public/toDoCreation.html', 'utf8');
+  contents = contents.replace('title of list', req.body.title);
+  contents = contents.replace('toDo description', req.body.description);
   addToDo(req);
   res.write(contents);
   res.end();
 };
 
+let handleItems = function(req) {
+
+}
+
+let addItems = function(req) {
+  let items = req.body.item;
+  let toDoKey = newUser.getToDoKey();
+  if (Array.isArray(items)) {
+    items.forEach(item => {
+      newUser.addItems(toDoKey, item);
+      return;
+    })
+  }
+  newUser.addItems(toDoKey, items)
+};
+
+handlers.redirectHomeAferSavingTd = function(req, res) {
+  addItems(req);
+  res.redirect('/home');
+}
 
 
 module.exports = handlers;
