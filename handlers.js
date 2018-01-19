@@ -135,7 +135,7 @@ handlers.redirectHomeAfterSavingTodo = function(req, res) {
 };
 
 handlers.displayTitlesInHome = function(req,res){
-  let userData = loadDatabase();
+  let userData = loadDatabase()[req.user.userName];
   let toDos = userData.toDos;
   let toDoKeys = Object.keys(toDos);
   let titles = toDoKeys.map((toDoKey)=>{
