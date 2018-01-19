@@ -14,9 +14,11 @@ app.get('/login',handlers.serveLoginPage);
 app.get('/home',handlers.serveHome);
 app.post('/createList',handlers.serveToDoCreationPage);
 app.post('/saveToDo',handlers.redirectHomeAfterSavingTodo);
+app.get('/todoLists',handlers.displayTitlesInHome);
 app.get('/logout',handlers.logoutUser);
 
 // ========================================================
 app.postprocessor(fileHandler.serveStaticFiles);
+app.postprocessor(handlers.storeToDos);
 
 module.exports = app;

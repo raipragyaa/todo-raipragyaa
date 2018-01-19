@@ -6,9 +6,15 @@ let newUser = new User('pragya');
 
 let handlers = {};
 
+let loadDatabase = function(){
+  let database = fs.readFileSync('./database/todo.json','utf8');
+  database = JSON.parse(database);
+  return database;
+};
+
 let toS = o => JSON.stringify(o, null, 2);
 
-const registeredUsers = JSON.parse(fs.readFileSync('./database/userData.json'));
+const registeredUsers = JSON.parse(fs.readFileSync('./database/userData.json','utf8'));
 
 handlers.logRequest = function(req, res) {
   let text = ['------------------------------',
@@ -100,16 +106,26 @@ let addItem = function(req) {
   newUser.addItems(toDoKey, items)
 };
 
-handlers.redirectHomeAfterSavingTodo = function(req, res) {
-  addItem(req);
-  storeToDos();
-  res.redirect('/home');
-};
-
-let storeToDos = function(req, res) {
+handlers.storeToDos = function(req, res) {
   let userContents = JSON.stringify(newUser, null, 2);
   fs.writeFileSync('./database/todo.json', userContents);
   return;
 };
 
+handlers.redirectHomeAfterSavingTodo = function(req, res) {
+  addItem(req);
+  res.redirect('/home');
+};
+
+handlers.displayTitlesInHome = function(req,res){
+  let userData = loadDatabase();
+  let toDos = userData.toDos;
+  let toDoKeys = Object.keys(toDos);
+  let titles = toDoKeys.map((toDoKey)=>{
+    return toDos[toDoKey].title;
+  })
+  res.write(JSON.stringify(titles));
+  res.end();
+};
+ 
 module.exports = handlers;

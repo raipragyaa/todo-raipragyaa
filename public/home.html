@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Home Page</title>
-    <link rel="stylesheet" href="/style/style.css">
-  </head>
-  <body>
-    <h1 id="hh1">Welcome Name</h1>
-    <a href="/logout"> <button type="button">Logout</button></a></br></br>
-    <div id="creationSpace">
-      <h2>Create New list</h2>
-      <form  action="createList" method="post">
-        Title:<input type="text" name="title">
-        Description: <input id="dscpArea" type="text" name="description"></br></br>
-        <input type="submit" value="submit">
-      </form></br>
-      <hr>
-    </div>
-    <div id="items">
-      <h2>Your ToDo Lists</h2>
-    </div>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Home Page</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <script src="./js/showTodos.js" charset="utf-8"></script>
+</head>
+<body>
+  <h1 id="hh1">Welcome Name</h1>
+  <a href="/logout"> <button type="button">Logout</button></a></br>
+  </br>
+  <div id="creationSpace">
+    <h2>Create New list</h2>
+    <form action="createList" method="post">
+      Title:<input type="text" name="title"> Description: <input id="dscpArea" type="text" name="description"></br>
+      </br>
+      <input type="submit" value="submit">
+    </form>
+    </br>
+    <hr>
+  </div>
+  <div id="todos">
+    <h2>Your ToDo Lists</h2>
+
+  </div>
+</body>
+
 </html>

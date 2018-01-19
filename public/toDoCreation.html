@@ -10,9 +10,6 @@
     <a href="home"> << Go to Home</a>
     <h1 id="ht1" >Write Your To-Do Here</h1>
     <a href="logout"> <button type="button">Logout</button> </a>
-    <div id="listImg">
-      <img src="img/thingstoDo.png" >
-    </div>
     <p>Title:title of list</p>
     <p>Description: toDo description</p>
     <div >
@@ -20,7 +17,7 @@
         <ol id="itemsBlock">
         </ol>
         <button type="button" onclick="createInputField()">add item</button>
-        <input type="submit" value="save">
+        <input type="submit" value="save" onclick="displayLinkOfToDo()" >
       </form>
     </div>
   </body>
