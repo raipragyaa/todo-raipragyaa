@@ -1,13 +1,21 @@
 const showTodos = function() {
   let todoTitles = JSON.parse(this.responseText);
   let todosDiv = document.getElementById("todos");
-  let titles = "";
   let counter = 0;
   todoTitles.forEach((title) => {
     counter++;
-    titles += `${counter}.${title}<br>`;
+    let para = document.createElement('p');
+    let viewBtn = document.createElement('button');
+    viewBtn.innerHTML = 'view';
+    viewBtn.setAttribute('onclick','viewToDo()')
+    let deleteBtn = document.createElement('button');
+    deleteBtn.innerHTML = 'delete';
+    deleteBtn.setAttribute('onclick','deleteToDo()')
+    para.innerText = `${counter}.${title}`
+    para.appendChild(viewBtn)
+    para.appendChild(deleteBtn)
+    todosDiv.appendChild(para)
   })
-  todosDiv.innerHTML = titles;
 };
 
 let displayTitles = function() {
