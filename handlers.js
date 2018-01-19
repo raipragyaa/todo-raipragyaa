@@ -2,12 +2,14 @@ const fs = require('fs');
 const Item = require('./appModels/item.js');
 const ToDo = require('./appModels/toDo.js');
 const User = require('./appModels/user.js');
+const retriveBehaviour = require('./retrive.js').retriveBehaviour;
 const ToDoHandler = require('./appModels/toDoHandler.js');
 
 
 let loadDatabase = function(){
   let database = fs.readFileSync('./database/todo.json','utf8');
   database = JSON.parse(database);
+  retriveBehaviour(database);
   return database;
 };
 
@@ -96,8 +98,6 @@ let addToDo = function(req) {
   let title = req.body.title;
   let description = req.body.description;
   let toDo = new ToDo(title,description);
-  console.log(toDo);
-  console.log(req.user.userName);
   toDoHandler.addToDos(req.user.userName,toDo);
 };
 
