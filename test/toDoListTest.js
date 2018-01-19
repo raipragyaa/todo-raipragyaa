@@ -18,7 +18,7 @@ describe('testing toDoList', () => {
   describe('todo list behaviour', () => {
     it('should add item', () => {
       let toDoList = new ToDo('To Do for work', undefined);
-      toDoList.addItem('goodBye');
+      toDoList.addItem(new Item('goodBye'));
       let expected = {
         0: new Item('goodBye')
       };
@@ -26,7 +26,7 @@ describe('testing toDoList', () => {
     })
     it('should delet item', () => {
       let toDoList = new ToDo('To Do for work', 'good');
-      toDoList.addItem('goodBye');
+      toDoList.addItem(new Item('goodBye'));
       let expected = {
         0: new Item('goodBye')
       };
@@ -37,19 +37,19 @@ describe('testing toDoList', () => {
   })
   it('can mark a item done', () => {
     let toDoList = new ToDo('To Do for work', 'good');
-    toDoList.addItem('This is important');
+    toDoList.addItem(new Item('This is important'));
     toDoList.markDone(0);
     assert(toDoList.items[0].status);
   })
   it('can mark a item as not done', () => {
     let toDoList = new ToDo('To Do for work', 'good');
-    toDoList.addItem('This is important');
+    toDoList.addItem(new Item('This is important'));
     toDoList.markAsNotDone(0);
     assert.isNotOk(toDoList.items[0].status);
   })
   it('item can be edited', () => {
     let myToDo = new ToDo('To Do for work', 'good');
-    myToDo.addItem('I have to complete toDo App');
+    myToDo.addItem(new Item('I have to complete toDo App'));
     let expected = new Item('I have to complete toDo App');
     assert.deepEqual(myToDo.getItem(0), expected);
     myToDo.editItem(0, 'I have completed login feature');

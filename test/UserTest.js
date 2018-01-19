@@ -1,6 +1,7 @@
 let assert = require('chai').assert;
 let User = require('../appModels/user.js');
 let ToDo = require('../appModels/toDo.js');
+let Item = require('../appModels/item.js')
 
 describe('testing User', () => {
   describe('User properties', () => {
@@ -10,7 +11,7 @@ describe('testing User', () => {
       assert.equal(pragya.name, 'pragya')
     })
     it('should have one toDoList', () => {
-      pragya.addToDo('todoforWork', 'Important');
+      pragya.addToDo(new ToDo('todoforWork', 'Important'));
       let expected = {
         0: new ToDo('todoforWork','Important')
       }
@@ -18,8 +19,8 @@ describe('testing User', () => {
     })
     it('should have todo lists', () => {
       let priya = new User('priya');
-      priya.addToDo('to', 'rtant');
-      priya.addToDo('todoforHome', 'veryImp');
+      priya.addToDo(new ToDo('to', 'rtant'));
+      priya.addToDo(new ToDo('todoforHome', 'veryImp'));
       let expected = {
         0: new ToDo('to', 'rtant'),
         1: new ToDo('todoforHome', 'veryImp')
@@ -35,7 +36,7 @@ describe('testing User', () => {
       let sayima = new User('Sayima');
       let title = 'todo';
       let description = 'for work';
-      sayima.addToDo(title, description);
+      sayima.addToDo(new ToDo(title, description));
       let expected = {
         0: new ToDo(title, description)
       }
@@ -46,23 +47,24 @@ describe('testing User', () => {
     let arvind = new User('arvind');
     let title = 'todo';
     let description = 'for work';
-    arvind.addToDo(title, description);
+    arvind.addToDo(new ToDo(title, description));
     let expected = {
       0: new ToDo(title, description)
     };
     assert.deepEqual(arvind.getToDos(), expected);
-    arvind.deleteList(0);
+    arvind.deleteToDo(0);
     assert.deepEqual(arvind.getToDos(), {});
   })
   describe('user can edit', () => {
     let joy = new User('joy');
     let title = 'home';
     let description = 'many works to do';
-    joy.addToDo(title, description);
+    let todoId = 0
+    joy.addToDo(new ToDo(title, description));
     it('user can edit title of a todo', () => {
-      assert.equal(joy.getToDo(0).title, 'home');
-      joy.editToDoTitle(0, 'homeStuff');
-      assert.equal(joy.getToDo(0).title, 'homeStuff');
+      assert.equal(joy.getToDo(todoId).title, 'home');
+      joy.editToDoTitle(todoId, 'homeStuff');
+      assert.equal(joy.getToDo(todoId).title, 'homeStuff');
     })
     it('user can edit description of todo', () => {
       assert.equal(joy.getToDo(0).description, 'many works to do');
@@ -75,8 +77,8 @@ describe('testing User', () => {
       let sulagna = new User('sulagna');
       let title = 'home';
       let description = 'many works to do';
-      sulagna.addToDo(title, description);
-      sulagna.addItems(0, 'first write your thoughts on paper')
+      sulagna.addToDo(new ToDo(title, description));
+      sulagna.addItems(0, new Item('first write your thoughts on paper'))
       assert.equal(sulagna.getItem(0, 0).content, 'first write your thoughts on paper');
     })
   })
@@ -85,8 +87,8 @@ describe('testing User', () => {
       let sulagna = new User('sulagna');
       let title = 'home';
       let description = 'many works to do';
-      sulagna.addToDo(title, description);
-      sulagna.addItems(0, 'first write your thoughts on paper')
+      sulagna.addToDo(new ToDo(title, description));
+      sulagna.addItems(0, new Item('first write your thoughts on paper'));
       assert.equal(sulagna.getItem(0, 0).content, 'first write your thoughts on paper');
       sulagna.editItem(0, 0, 'I have completed some features');
       assert.equal(sulagna.getItem(0, 0), 'I have completed some features');
@@ -97,8 +99,8 @@ describe('testing User', () => {
       let sulagna = new User('sulagna');
       let title = 'home';
       let description = 'many works to do';
-      sulagna.addToDo(title, description);
-      sulagna.addItems(0, 'first write your thoughts on paper');
+      sulagna.addToDo(new ToDo(title, description));
+      sulagna.addItems(0, new Item('first write your thoughts on paper'));
       sulagna.markItemDone(0, 0);
       assert.isOk(sulagna.getItem(0, 0).status);
     })
@@ -106,8 +108,8 @@ describe('testing User', () => {
       let sulagna = new User('sulagna');
       let title = 'home';
       let description = 'many works to do';
-      sulagna.addToDo(title, description);
-      sulagna.addItems(0, 'first write your thoughts on paper');
+      sulagna.addToDo(new ToDo(title, description));
+      sulagna.addItems(0,new Item('first write your thoughts on paper'));
       sulagna.markItemNotDone(0, 0);
       assert.isNotOk(sulagna.getItem(0, 0).status);
     })

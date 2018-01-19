@@ -1,6 +1,3 @@
-let ToDo = require('./toDo.js');
-let Item = require('./item.js');
-
 const User = function(name, toDos = {}) {
   this.name = name;
   this.toDos = toDos;
@@ -14,48 +11,42 @@ User.prototype = {
   getToDos: function() {
     return this.toDos;
   },
-  getToDo: function(toDoKey){
-    return this.ToDos[toDoKey];
-  },
-  getToDoKey: function(){
-    return this.toDoKey - 1;
-  },
   getToDo: function(toDoKey) {
     return this.toDos[toDoKey];
   },
-  getIdOfList: function() {
-    return this.toDoKey;
+  getToDoKey: function() {
+    return this.toDoKey - 1;
   },
   getItem: function(toDoKey, itemKey) {
     return this.toDos[toDoKey].getItem(itemKey);
   },
   addItems: function(toDoKey, content) {
-    return this.toDos[toDoKey].addItem(content);
+    this.toDos[toDoKey].addItem(content);
   },
-  addToDo: function(title, description) {
-    this.toDos[this.toDoKey] = new ToDo(title, description);
+  addToDo: function(toDo) {
+    this.toDos[this.toDoKey] = toDo;
     this.toDoKey++;
   },
-  deleteList: function(toDoKey) {
-    return delete this.toDos[toDoKey];
+  deleteToDo: function(toDoKey) {
+    delete this.toDos[toDoKey];
   },
   markItemDone: function(toDoKey, itemKey) {
-    return this.toDos[toDoKey].markDone(itemKey);
+    this.toDos[toDoKey].markDone(itemKey);
   },
   markItemNotDone: function(toDoKey, itemKey) {
-    return this.toDos[toDoKey].markAsNotDone(itemKey);
+    this.toDos[toDoKey].markAsNotDone(itemKey);
   },
   editToDoTitle: function(toDoKey, newTitle) {
-    return this.toDos[toDoKey].changeTitle(newTitle);
+    this.toDos[toDoKey].changeTitle(newTitle);
   },
   editToDoDescription: function(toDoKey, newDescription) {
-    return this.toDos[toDoKey].changeDescription(newDescription);
+    this.toDos[toDoKey].changeDescription(newDescription);
   },
   editItem: function(toDoKey, itemKey, newContent) {
-    return this.toDos[toDoKey].editItem(itemKey, newContent);
+    this.toDos[toDoKey].editItem(itemKey, newContent);
   },
   deleteItem: function(toDoKey, itemKey) {
-    return this.toDos[toDoKey].deleteItem(itemKey);
+    this.toDos[toDoKey].deleteItem(itemKey);
   }
 };
 

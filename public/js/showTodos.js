@@ -5,7 +5,7 @@ const showTodos = function() {
   let counter = 0;
   todoTitles.forEach((title) => {
     counter++;
-    titles += `${counter}.${title}`;
+    titles += `${counter}.${title}<br>`;
   })
   todosDiv.innerHTML = titles;
 };

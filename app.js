@@ -14,7 +14,7 @@ app.get('/login',handlers.serveLoginPage);
 app.get('/home',handlers.serveHome);
 app.post('/createList',handlers.serveToDoCreationPage);
 app.post('/saveToDo',handlers.redirectHomeAfterSavingTodo);
-app.get('/todoLists',handlers.displayTitlesInHome);
+// app.get('/todoLists',handlers.displayTitlesInHome);
 app.get('/logout',handlers.logoutUser);
 
 // ========================================================

@@ -8,13 +8,13 @@ describe('testing Item', () => {
       let expected = 'this is a';
       assert.equal(item.getContent(), expected);
     })
+    it('should mark as notdone', () => {
+      item.notDone();
+      assert.isNotOk(item.status);
+    })
     it('should mark as done', () => {
       item.done();
       assert.isOk(item.status);
-    })
-    it('should mark as undone', () => {
-      item.notDone();
-      assert.isNotOk(item.status);
     })
   })
 });

@@ -1,5 +1,3 @@
-let Item = require('./item.js');
-
 const ToDo = function(title, description,items={}) {
   this.title = title;
   this.description = description;
@@ -14,8 +12,8 @@ ToDo.prototype = {
   getDescription: function() {
     return this.description;
   },
-  addItem: function(content) {
-    this.items[this.itemKey] = new Item(content);
+  addItem: function(item) {
+    this.items[this.itemKey] = item;
     this.itemKey++;
   },
   deleteItem: function(itemKey) {

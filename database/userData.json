@@ -1,4 +1,10 @@
-[{
-  "userName": "pragya",
-  "name": "Pragya Rai"
-}]
+[
+  {
+    "userName": "pragya",
+    "name": "Pragya Rai"
+  },
+  {
+    "userName":"manindra",
+    "name":"MMK"
+  }
+]
