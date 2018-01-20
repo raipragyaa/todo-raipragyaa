@@ -10,6 +10,8 @@ app.preprocessor(handlers.serveIndexIfNotLoggedIn);
 
 // =====================================================
 app.post('/login',handlers.loginUser);
+app.post('/viewTodo',handlers.viewToDo);
+app.get('/toDoLists',handlers.sendTemplate);
 app.get('/login',handlers.serveLoginPage);
 app.get('/home',handlers.serveHome);
 app.post('/createList',handlers.serveToDoCreationPage);

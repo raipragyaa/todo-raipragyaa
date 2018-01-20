@@ -155,4 +155,41 @@ handlers.deleteToDo = function(req, res) {
   let toDoKey = req.body.toDoKey;
   toDoHandler.deleteToDo(userName, toDoKey);
 };
+
+let toHtml = function(title,description,items){
+  let contents = `<pre>`;
+  contents += `<h2>Title:${title}</h2>`;
+  contents +=  `<h2>Description:${description}</h2>`;
+  contents += `<ol>`
+  items.forEach((item)=>{
+    contents += `<li>${item}</li>`
+  })
+  contents += `</ol>`;
+  return contents;
+}
+
+handlers.viewToDo = function(req,res){
+  let userName = req.user.userName;
+  let toDoKey = req.body.toDoKey;
+  let toDo = toDoHandler.getToDo(userName,toDoKey);
+  let title = toDo.title;
+  let description = toDo.description;
+  let items = toDo.items;
+  let itemsKeys  = Object.keys(items);
+  let allItems = itemsKeys.map((itemKey)=>{
+    return items[itemKey].content;
+  });
+  let contents = toHtml(title,description,allItems);
+  let fileContents = fs.readFileSync('public/toDoLists.html', 'utf8');
+  fileContents = fileContents.replace('todos',contents);
+  fs.writeFileSync('public/template.html',fileContents);
+  res.end();
+};
+
+handlers.sendTemplate = function(req,res){
+  let contents = fs.readFileSync('public/template.html','utf8');
+  res.write(contents);
+  res.end();
+};
+
 module.exports = handlers;

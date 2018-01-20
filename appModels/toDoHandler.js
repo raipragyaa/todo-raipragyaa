@@ -14,6 +14,9 @@ class ToDoHandler{
   addToDos(userName,toDo){
     this.users[userName].addToDo(toDo);
   }
+  getToDo(userName,toDoKey){
+    return this.users[userName].getToDo(toDoKey);
+  }
   deleteToDo(userName,toDoKey){
     this.users[userName].deleteToDo(toDoKey);
   }

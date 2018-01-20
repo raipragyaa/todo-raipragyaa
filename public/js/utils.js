@@ -42,4 +42,12 @@ const deleteToDo = function(){
   window.location.reload();
 };
 
+const viewToDo = function(){
+  let req = new XMLHttpRequest();
+  req.open("POST",'/viewTodo');
+  req.send(`toDoKey=${event.target.id}`);
+  location.href = '/toDoLists';
+};
+
+
 window.onload = displayTitles;
