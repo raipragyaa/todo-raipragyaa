@@ -1,20 +1,30 @@
+const createButton =function(innerText,onclickOperator,buttonId){
+  let button = document.createElement('button');
+  button.innerText = innerText;
+  button.id = buttonId;
+  button.setAttribute('onclick',onclickOperator);
+  return button;
+};
+
+const createDisplayElements = function(div,count,title,btnId){
+  let para = document.createElement('p');
+  para.innerText = `${count}.${title}`;
+  let viewBtn = createButton('view','viewToDo()',btnId);
+  let deleteBtn= createButton('delete','deleteToDo()',btnId);
+  para.appendChild(viewBtn)
+  para.appendChild(deleteBtn)
+  div.appendChild(para)
+};
+
 const showTodos = function() {
-  let todoTitles = JSON.parse(this.responseText);
+  let todoTitlesWithId = JSON.parse(this.responseText);
   let todosDiv = document.getElementById("todos");
   let counter = 0;
-  todoTitles.forEach((title) => {
+  let toDoIds = Object.keys(todoTitlesWithId);
+  toDoIds.forEach((id) => {
     counter++;
-    let para = document.createElement('p');
-    let viewBtn = document.createElement('button');
-    viewBtn.innerHTML = 'view';
-    viewBtn.setAttribute('onclick','viewToDo()')
-    let deleteBtn = document.createElement('button');
-    deleteBtn.innerHTML = 'delete';
-    deleteBtn.setAttribute('onclick','deleteToDo()')
-    para.innerText = `${counter}.${title}`
-    para.appendChild(viewBtn)
-    para.appendChild(deleteBtn)
-    todosDiv.appendChild(para)
+    title = todoTitlesWithId[id];
+    createDisplayElements(todosDiv,counter,title,id);
   })
 };
 
@@ -23,6 +33,13 @@ let displayTitles = function() {
   req.addEventListener("load", showTodos);
   req.open("GET", "/todoLists");
   req.send();
+};
+
+const deleteToDo = function(){
+  let req = new XMLHttpRequest();
+  req.open('POST',"/deleteTodo");
+  req.send(`toDoKey=${event.target.id}`)
+  window.location.reload();
 };
 
 window.onload = displayTitles;

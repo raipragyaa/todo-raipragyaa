@@ -24,7 +24,7 @@ describe('testing toDoList', () => {
       };
       assert.deepInclude(toDoList.items, expected);
     })
-    it('should delet item', () => {
+    it('should delete item', () => {
       let toDoList = new ToDo('To Do for work', 'good');
       toDoList.addItem(new Item('goodBye'));
       let expected = {

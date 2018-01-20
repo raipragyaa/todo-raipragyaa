@@ -6,20 +6,22 @@ const retriveBehaviour = require('./retrive.js').retriveBehaviour;
 const ToDoHandler = require('./appModels/toDoHandler.js');
 
 
-let loadDatabase = function(){
-  let database = fs.readFileSync('./database/todo.json','utf8');
+let loadDatabase = function() {
+  let database = fs.readFileSync('./database/todo.json', 'utf8') || '{}';
   database = JSON.parse(database);
   retriveBehaviour(database);
   return database;
 };
 
-const toDoHandler = new ToDoHandler(loadDatabase());
+let usersData = loadDatabase();
+
+const toDoHandler = new ToDoHandler(usersData);
 
 let handlers = {};
 
 let toS = o => JSON.stringify(o, null, 2);
 
-const registeredUsers = JSON.parse(fs.readFileSync('./database/userData.json','utf8'));
+const registeredUsers = JSON.parse(fs.readFileSync('./database/userData.json', 'utf8'));
 
 handlers.logRequest = function(req, res) {
   let text = ['------------------------------',
@@ -50,9 +52,9 @@ handlers.serveHome = function(req, res) {
   res.end();
 };
 
-let addUserIfNotExsist = function(req){
+let addUserIfNotExsist = function(req) {
   let user = req.body.userName;
-  if(!toDoHandler.doesUserExsist(user)){
+  if (!toDoHandler.doesUserExsist(user)) {
     let newUser = new User(user);
     toDoHandler.addUser(newUser);
   }
@@ -95,10 +97,11 @@ handlers.logoutUser = function(req, res) {
 };
 
 let addToDo = function(req) {
+  let userName = req.user.userName;
   let title = req.body.title;
   let description = req.body.description;
-  let toDo = new ToDo(title,description);
-  toDoHandler.addToDos(req.user.userName,toDo);
+  let toDo = new ToDo(title, description);
+  toDoHandler.addToDos(userName, toDo);
 };
 
 handlers.serveToDoCreationPage = function(req, res) {
@@ -111,16 +114,17 @@ handlers.serveToDoCreationPage = function(req, res) {
 };
 
 let addItems = function(req) {
+  let userName = req.user.userName;
   let items = req.body.item;
-  let toDoKey = toDoHandler.getToDoKey(req.user.userName);
-  if (Array.isArray(items)) {
-    items.forEach(item => {
-      let newItem = new Item(item);
-      toDoHandler.addItem(req.user.userName,toDoKey, newItem);
-    })
-    return;
+  let toDoKey = toDoHandler.getToDoKey(userName);
+  if (!Array.isArray(items)) {
+    items = [items]
   }
-  toDoHandler.addItem(req.user.userName,toDoKey, new Item(items));
+  items.forEach(item => {
+    let newItem = new Item(item);
+    toDoHandler.addItem(userName, toDoKey, newItem);
+  })
+  return;
 };
 
 handlers.storeToDos = function(req, res) {
@@ -134,15 +138,21 @@ handlers.redirectHomeAfterSavingTodo = function(req, res) {
   res.redirect('/home');
 };
 
-handlers.displayTitlesInHome = function(req,res){
-  let userData = loadDatabase()[req.user.userName];
+handlers.displayTitlesInHome = function(req, res) {
+  let userData = usersData[req.user.userName];
   let toDos = userData.toDos;
   let toDoKeys = Object.keys(toDos);
-  let titles = toDoKeys.map((toDoKey)=>{
-    return toDos[toDoKey].title;
-  })
+  let titles = toDoKeys.reduce((object, toDoKey) => {
+    object[toDoKey] = toDos[toDoKey].title;
+    return object;
+  }, {});
   res.write(JSON.stringify(titles));
   res.end();
 };
 
+handlers.deleteToDo = function(req, res) {
+  let userName = req.user.userName;
+  let toDoKey = req.body.toDoKey;
+  toDoHandler.deleteToDo(userName, toDoKey);
+};
 module.exports = handlers;

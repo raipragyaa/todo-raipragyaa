@@ -16,6 +16,7 @@ app.post('/createList',handlers.serveToDoCreationPage);
 app.post('/saveToDo',handlers.redirectHomeAfterSavingTodo);
 app.get('/todoLists',handlers.displayTitlesInHome);
 app.get('/logout',handlers.logoutUser);
+app.post('/deleteTodo',handlers.deleteToDo);
 
 // ========================================================
 app.postprocessor(fileHandler.serveStaticFiles);
