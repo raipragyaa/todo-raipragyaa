@@ -7,7 +7,10 @@ const ToDoHandler = require('./appModels/toDoHandler.js');
 
 
 let loadDatabase = function() {
-  let database = fs.readFileSync('./database/todo.json', 'utf8') || '{}';
+  let userData = '{}';
+  if(fs.existsSync('./database/todo.json')){
+    userData = fs.readFileSync('./database/todo.json','utf8')
+  };
   database = JSON.parse(database);
   retriveBehaviour(database);
   return database;
@@ -166,6 +169,13 @@ let toHtml = function(title,description,items){
   })
   contents += `</ol>`;
   return contents;
+};
+
+const getAllItems = function(items){
+  let itemsKeys  = Object.keys(items);
+  return itemsKeys.map((itemKey)=>{
+    return items[itemKey].content;
+  });
 }
 
 handlers.viewToDo = function(req,res){
@@ -175,10 +185,7 @@ handlers.viewToDo = function(req,res){
   let title = toDo.title;
   let description = toDo.description;
   let items = toDo.items;
-  let itemsKeys  = Object.keys(items);
-  let allItems = itemsKeys.map((itemKey)=>{
-    return items[itemKey].content;
-  });
+  let allItems = getAllItems(items)
   let contents = toHtml(title,description,allItems);
   let fileContents = fs.readFileSync('public/toDoLists.html', 'utf8');
   fileContents = fileContents.replace('todos',contents);
