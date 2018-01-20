@@ -11,9 +11,9 @@ let loadDatabase = function() {
   if(fs.existsSync('./database/todo.json')){
     userData = fs.readFileSync('./database/todo.json','utf8')
   };
-  database = JSON.parse(database);
-  retriveBehaviour(database);
-  return database;
+  userData = JSON.parse(userData);
+  retriveBehaviour(userData);
+  return userData;
 };
 
 let usersData = loadDatabase();
