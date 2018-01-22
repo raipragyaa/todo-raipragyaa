@@ -3,6 +3,15 @@ let assert = chai.assert;
 let request = require('./requestSimulator.js');
 let app = require('../app.js');
 let th = require('./testHelper.js');
+let fs = require('./dummyFs.js');
+app.fs = new fs();
+app.registeredUsers = [{
+    "userName": "pragya",
+    "name": "Pragya Rai"
+  },
+  {
+    "userName":"manindra",
+    "name":"MMK"}]
 
 describe('app', () => {
   describe('GET /bad', () => {
