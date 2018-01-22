@@ -8,7 +8,7 @@ describe('testing User', () => {
     let pragya = new User('pragya');
     it('should have name', () => {
       let expected = 'pragya';
-      assert.equal(pragya.name, 'pragya')
+      assert.equal(pragya.getName(), 'pragya')
     })
     it('should have one toDoList', () => {
       pragya.addToDo(new ToDo('todoforWork', 'Important'));
@@ -26,6 +26,7 @@ describe('testing User', () => {
         1: new ToDo('todoforHome', 'veryImp')
       }
       assert.deepEqual(priya.getToDos(), expected);
+      assert.equal(priya.getToDoKey(),1)
     })
     it('all lists have unique id', () => {
       let ravindar = new User('ravindar');
@@ -112,6 +113,20 @@ describe('testing User', () => {
       sulagna.addItems(0,new Item('first write your thoughts on paper'));
       sulagna.markItemNotDone(0, 0);
       assert.isNotOk(sulagna.getItem(0, 0).status);
+    })
+  })
+  describe('user can delete item of a todo',()=>{
+    it('can delete a item of given todo',()=>{
+      let user = new User('bahu');
+      let toDo = {
+        item: 'jalebi',
+        deleteItem: function(){
+          delete this.item;
+        }
+      };
+      user.addToDo(toDo);
+      user.deleteItem(0);
+      assert.equal(toDo.item,undefined);
     })
   })
 });

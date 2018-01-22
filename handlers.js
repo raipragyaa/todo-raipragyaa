@@ -8,8 +8,8 @@ const ToDoHandler = require('./appModels/toDoHandler.js');
 
 let loadDatabase = function() {
   let userData = '{}';
-  if(fs.existsSync('./database/todo.json')){
-    userData = fs.readFileSync('./database/todo.json','utf8')
+  if (fs.existsSync('./database/todo.json')) {
+    userData = fs.readFileSync('./database/todo.json', 'utf8') || '{}'
   };
   userData = JSON.parse(userData);
   retriveBehaviour(userData);
@@ -80,7 +80,7 @@ handlers.loginUser = function(req, res) {
 };
 
 handlers.serveIndexIfNotLoggedIn = function(req, res) {
-  if (req.urlIsOneOf(['/home', '/todoCreation', '/toDos']) && !req.user) {
+  if (req.urlIsOneOf(['/deleteTodo', '/todoLists', '/saveToDo', '/viewTodo', '/home', '/todoCreation', '/toDos']) && !req.user) {
     res.redirect('/');
   }
 };
@@ -159,42 +159,52 @@ handlers.deleteToDo = function(req, res) {
   toDoHandler.deleteToDo(userName, toDoKey);
 };
 
-let toHtml = function(title,description,items){
+const createButton = function(name) {
+  return `<button type="button" name="button">${name}</button>`
+}
+
+const createCheckBox = function(status) {
+  if (status) {
+    return ` <input type="checkbox" name="status" checked>`
+  }
+  return ` <input type="checkbox" name="status">`
+}
+
+let toHtml = function(title, description, items) {
+  let editBtn = createButton('edit');
+  let deleteBtn = createButton('delete');
   let contents = `<pre>`;
-  contents += `<h2>Title:${title}</h2>`;
-  contents +=  `<h2>Description:${description}</h2>`;
-  contents += `<ol>`
-  items.forEach((item)=>{
-    contents += `<li>${item}</li>`
+  contents += `<h2>Title:${title} ${editBtn}</h2>`;
+  contents += `<h2>Description:${description} ${editBtn}</h2><ol>`;
+  items.forEach((item) => {
+    let checkBox = createCheckBox(item.status)
+    contents += `<li>${item.content} ${checkBox} ${editBtn} ${deleteBtn}</li>`
   })
-  contents += `</ol>`;
+  contents += `</ol><br>`;
+  contents += createButton('Add Item')
+  contents += createButton("save");
   return contents;
 };
 
-const getAllItems = function(items){
-  let itemsKeys  = Object.keys(items);
-  return itemsKeys.map((itemKey)=>{
-    return items[itemKey].content;
+const getAllItems = function(items) {
+  let itemsKeys = Object.keys(items);
+  return itemsKeys.map((itemKey) => {
+    return items[itemKey];
   });
-}
+};
 
-handlers.viewToDo = function(req,res){
-  let userName = req.user.userName;
-  let toDoKey = req.body.toDoKey;
-  let toDo = toDoHandler.getToDo(userName,toDoKey);
-  let title = toDo.title;
-  let description = toDo.description;
-  let items = toDo.items;
-  let allItems = getAllItems(items)
-  let contents = toHtml(title,description,allItems);
+handlers.viewToDo = function(req, res) {
+  let toDo = toDoHandler.getToDo(req.user.userName, req.body.toDoKey);
+  let allItems = getAllItems(toDo.items);
+  let contents = toHtml(toDo.title, toDo.description, allItems);
   let fileContents = fs.readFileSync('public/toDoLists.html', 'utf8');
-  fileContents = fileContents.replace('todos',contents);
-  fs.writeFileSync('public/template.html',fileContents);
+  fileContents = fileContents.replace('todos', contents);
+  fs.writeFileSync('public/template.html', fileContents);
   res.end();
 };
 
-handlers.sendTemplate = function(req,res){
-  let contents = fs.readFileSync('public/template.html','utf8');
+handlers.sendTemplate = function(req, res) {
+  let contents = fs.readFileSync('public/template.html', 'utf8');
   res.write(contents);
   res.end();
 };
