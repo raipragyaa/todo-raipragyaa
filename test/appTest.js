@@ -105,4 +105,42 @@ describe('app', () => {
       })
     })
   })
+  describe('GET /home', () => {
+    it('should be redirected to index page without cookies', done => {
+      request(app, {
+        method: 'GET',
+        url: '/home',
+        headers:{
+          cookie:'89tyyd18992980'
+        },
+      }, res => {
+        th.should_be_redirected_to(res, '/');
+        done();
+      })
+    })
+  })
+  describe('POST /login', () => {
+    it('should be redirected to home if valid user', done => {
+      request(app, {
+        method: 'POST',
+        url: '/login',
+        body:'userName=pragya&password=gwhioghuh',
+      }, res => {
+        th.should_be_redirected_to(res, '/home');
+        done();
+      })
+    })
+  })
+  describe('GET /', () => {
+    it('should be redirected to home if loggedIn', done => {
+      request(app, {
+        user:'pragya',
+        method: 'GET',
+        url: '/',
+      }, res => {
+        th.should_be_redirected_to(res, '/home');
+        done();
+      })
+    })
+  })
 })

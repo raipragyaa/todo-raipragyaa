@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 const getContentType = function(filePath) {
   let fileExtention = filePath.split('.')[1]||"";
   let headers = {
@@ -29,7 +27,7 @@ const serveStaticFiles = function(req, res) {
   }
   let filePath = 'public' + req.url;
   let headers = getContentType(filePath);
-  fs.readFile(filePath, (err, data) => {
+  this.fs.readFile(filePath, (err, data) => {
     if (err) return respondOnSourceNotFound(req, res);
     res.statusCode = 200;
     res.setHeader('Content-Type', headers);

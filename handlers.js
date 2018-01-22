@@ -1,46 +1,26 @@
-const fs = require('fs');
 const Item = require('./appModels/item.js');
 const ToDo = require('./appModels/toDo.js');
 const User = require('./appModels/user.js');
-const retriveBehaviour = require('./retrive.js').retriveBehaviour;
-const ToDoHandler = require('./appModels/toDoHandler.js');
-
-
-let loadDatabase = function() {
-  let userData = '{}';
-  if (fs.existsSync('./database/todo.json')) {
-    userData = fs.readFileSync('./database/todo.json', 'utf8') || '{}'
-  };
-  userData = JSON.parse(userData);
-  retriveBehaviour(userData);
-  return userData;
-};
-
-let usersData = loadDatabase();
-
-const toDoHandler = new ToDoHandler(usersData);
-
+const loadDatabase = require('./databaseHandler.js').loadDatabase;
 let handlers = {};
 
 let toS = o => JSON.stringify(o, null, 2);
 
-const registeredUsers = JSON.parse(fs.readFileSync('./database/userData.json', 'utf8'));
-
-handlers.logRequest = function(req, res) {
+handlers.logRequest = function(req,res) {
   let text = ['------------------------------',
     `${req.method} ${req.url}`,
     `HEADERS=> ${toS(req.headers)}`,
     `COOKIES=> ${toS(req.cookies)}`,
     `BODY=> ${toS(req.body)}`, ''
   ].join('\n');
-  fs.appendFile('request.log', text, () => {});
+  this.fs.appendFile('request.log', text, () => {});
   console.log(`${req.method} ${req.url}`);
 };
 
 
 handlers.loadUser = function(req, res) {
   let sessionid = req.cookies.sessionid;
-  let user = registeredUsers.find(u => u.sessionid == sessionid);
+  let user = this.registeredUsers.find(u => u.sessionid == sessionid);
   if (sessionid && user) {
     req.user = user;
   }
@@ -48,30 +28,30 @@ handlers.loadUser = function(req, res) {
 };
 
 handlers.serveHome = function(req, res) {
-  let contents = fs.readFileSync('public/home.html', 'utf8');
+  let contents = this.fs.readFileSync('public/home.html', 'utf8');
   let userName = req.user.userName;
   contents = contents.replace('Name', userName);
   res.write(contents);
   res.end();
 };
 
-let addUserIfNotExsist = function(req) {
+let addUserIfNotExsist = function(req,handler) {
   let user = req.body.userName;
-  if (!toDoHandler.doesUserExsist(user)) {
+  if (!handler.doesUserExsist(user)) {
     let newUser = new User(user);
-    toDoHandler.addUser(newUser);
+    handler.addUser(newUser);
   }
   return;
 };
 
 handlers.loginUser = function(req, res) {
-  let user = registeredUsers.find(u => u.userName == req.body.userName);
+  let user = this.registeredUsers.find(u => u.userName == req.body.userName);
   if (!user) {
     res.setHeader('Set-Cookie', 'message=login failed; Max-Age=5');
     res.redirect('/login');
     return;
   }
-  addUserIfNotExsist(req);
+  addUserIfNotExsist(req,this.toDoHandler);
   let sessionid = new Date().getTime();
   res.setHeader('Set-Cookie', `sessionid=${sessionid}`);
   user.sessionid = sessionid;
@@ -85,8 +65,12 @@ handlers.serveIndexIfNotLoggedIn = function(req, res) {
   }
 };
 
+handlers.redirectLoggedInUserToHome = (req,res)=>{
+  if(req.urlIsOneOf(['/','/login']) && req.user) res.redirect('/home');
+}
+
 handlers.serveLoginPage = function(req, res) {
-  let contents = fs.readFileSync('public/login.html', 'utf8');
+  let contents = this.fs.readFileSync('public/login.html', 'utf8');
   if (req.cookies.message) {
     contents += 'Login Failed';
   }
@@ -99,50 +83,50 @@ handlers.logoutUser = function(req, res) {
   res.redirect('/');
 };
 
-let addToDo = function(req) {
+let addToDo = function(req,handler) {
   let userName = req.user.userName;
   let title = req.body.title;
   let description = req.body.description;
   let toDo = new ToDo(title, description);
-  toDoHandler.addToDos(userName, toDo);
+  handler.addToDos(userName, toDo);
 };
 
 handlers.serveToDoCreationPage = function(req, res) {
-  let contents = fs.readFileSync('public/toDoCreation.html', 'utf8');
+  let contents = this.fs.readFileSync('public/toDoCreation.html', 'utf8');
   contents = contents.replace('title of list', req.body.title);
   contents = contents.replace('toDo description', req.body.description);
-  addToDo(req);
+  addToDo(req,this.toDoHandler);
   res.write(contents);
   res.end();
 };
 
-let addItems = function(req) {
+let addItems = function(req,handler) {
   let userName = req.user.userName;
   let items = req.body.item;
-  let toDoKey = toDoHandler.getToDoKey(userName);
+  let toDoKey = handler.getToDoKey(userName);
   if (!Array.isArray(items)) {
     items = [items]
   }
   items.forEach(item => {
     let newItem = new Item(item);
-    toDoHandler.addItem(userName, toDoKey, newItem);
+    handler.addItem(userName, toDoKey, newItem);
   })
   return;
 };
 
 handlers.storeToDos = function(req, res) {
-  let userContents = JSON.stringify(toDoHandler.users, null, 2);
-  fs.writeFileSync('./database/todo.json', userContents);
+  let userContents = JSON.stringify(this.toDoHandler.users, null, 2);
+  this.fs.writeFileSync('./database/todo.json', userContents);
   return;
 };
 
 handlers.redirectHomeAfterSavingTodo = function(req, res) {
-  addItems(req);
+  addItems(req,this.toDoHandler);
   res.redirect('/home');
 };
 
 handlers.displayTitlesInHome = function(req, res) {
-  let userData = usersData[req.user.userName];
+  let userData = this.toDoHandler.getUsers()[req.user.userName];
   let toDos = userData.toDos;
   let toDoKeys = Object.keys(toDos);
   let titles = toDoKeys.reduce((object, toDoKey) => {
@@ -156,7 +140,7 @@ handlers.displayTitlesInHome = function(req, res) {
 handlers.deleteToDo = function(req, res) {
   let userName = req.user.userName;
   let toDoKey = req.body.toDoKey;
-  toDoHandler.deleteToDo(userName, toDoKey);
+  this.toDoHandler.deleteToDo(userName, toDoKey);
 };
 
 const createButton = function(name) {
@@ -175,12 +159,12 @@ let toHtml = function(title, description, items) {
   let deleteBtn = createButton('delete');
   let contents = `<pre>`;
   contents += `<h2>Title:${title} ${editBtn}</h2>`;
-  contents += `<h2>Description:${description} ${editBtn}</h2><ol>`;
+  contents += `<h2>Description:${description} ${editBtn}</h2><ul>`;
   items.forEach((item) => {
     let checkBox = createCheckBox(item.status)
     contents += `<li>${item.content} ${checkBox} ${editBtn} ${deleteBtn}</li>`
   })
-  contents += `</ol><br>`;
+  contents += `</ul><br>`;
   contents += createButton('Add Item')
   contents += createButton("save");
   return contents;
@@ -194,17 +178,17 @@ const getAllItems = function(items) {
 };
 
 handlers.viewToDo = function(req, res) {
-  let toDo = toDoHandler.getToDo(req.user.userName, req.body.toDoKey);
+  let toDo = this.toDoHandler.getToDo(req.user.userName, req.body.toDoKey);
   let allItems = getAllItems(toDo.items);
   let contents = toHtml(toDo.title, toDo.description, allItems);
-  let fileContents = fs.readFileSync('public/toDoLists.html', 'utf8');
+  let fileContents = this.fs.readFileSync('public/toDoLists.html', 'utf8');
   fileContents = fileContents.replace('todos', contents);
-  fs.writeFileSync('public/template.html', fileContents);
+  this.fs.writeFileSync('public/template.html', fileContents);
   res.end();
 };
 
 handlers.sendTemplate = function(req, res) {
-  let contents = fs.readFileSync('public/template.html', 'utf8');
+  let contents = this.fs.readFileSync('public/template.html', 'utf8');
   res.write(contents);
   res.end();
 };
