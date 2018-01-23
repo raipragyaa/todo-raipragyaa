@@ -32,7 +32,6 @@ const serveStaticFiles = function(req, res) {
     res.statusCode = 200;
     res.setHeader('Content-Type', headers);
     res.write(data);
-    res.end();
     return ;
   }
   return respondOnSourceNotFound(req,res)

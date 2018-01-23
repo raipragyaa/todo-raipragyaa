@@ -17,13 +17,6 @@ class MockFileSystem {
     }
     throw new Error('file not found')
   }
-  readFile(file,callback){
-    let error = null;
-    if(!this.files[file]){
-      error = new Error('file not found')
-    }
-    callback(error,this.files[file])
-  }
   writeFileSync(file,content){
     this.files[file]=content;
   }

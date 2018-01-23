@@ -116,6 +116,7 @@ let addItems = function(req,handler) {
 
 handlers.storeToDos = function(req, res) {
   let userContents = JSON.stringify(this.toDoHandler.users, null, 2);
+  console.log('******************************************');
   this.fs.writeFileSync('./database/todo.json', userContents);
   res.end()
   return;
@@ -144,8 +145,8 @@ handlers.deleteToDo = function(req, res) {
   this.toDoHandler.deleteToDo(userName, toDoKey);
 };
 
-const createButton = function(name) {
-  return `<button type="button" name="button">${name}</button>`
+const createButtonWithOnclick = function(innerText,onclickOperator,id){
+  return `<button id="${id}" onclick="${onclickOperator}" type="button" name="button">${innerText}</button>`
 }
 
 const createCheckBox = function(status) {
@@ -155,40 +156,41 @@ const createCheckBox = function(status) {
   return ` <input type="checkbox" name="status">`
 }
 
+const getEditButton = function(id){
+  return createButtonWithOnclick('edit','editItem()',id)
+}
+
+const getDeleteButton = function(id){
+  return createButtonWithOnclick('delete','deleteItem()',id)
+}
+
 let toHtml = function(title, description, items) {
-  let editBtn = createButton('edit');
-  let deleteBtn = createButton('delete');
   let contents = `<pre>`;
-  contents += `<h2>Title:${title} ${editBtn}</h2>`;
-  contents += `<h2>Description:${description} ${editBtn}</h2><ul>`;
-  items.forEach((item) => {
+  contents += `<h2>Title:${title} ${createButtonWithOnclick('edit','editTitle()','title')}</h2>`;
+  contents += `<h2>Description:${description} ${createButtonWithOnclick('edit','editDescription()','description')}</h2><ul>`;
+  let allItems = Object.keys(items);
+  allItems.forEach((itemId) => {
+    let id = itemId;
+    let item = items[itemId];
     let checkBox = createCheckBox(item.status)
-    contents += `<li>${item.content} ${checkBox} ${editBtn} ${deleteBtn}</li>`
+    contents += `<li>${item.content} ${checkBox} ${getEditButton(id)} ${getDeleteButton(id)}</li>`
   })
   contents += `</ul><br>`;
-  contents += createButton('Add Item')
-  contents += createButton("save");
+  contents += createButtonWithOnclick('Add Item','addItem()','addItem')
+  contents += createButtonWithOnclick("save",'save()','save');
   return contents;
-};
-
-const getAllItems = function(items) {
-  let itemsKeys = Object.keys(items);
-  return itemsKeys.map((itemKey) => {
-    return items[itemKey];
-  });
 };
 
 handlers.viewToDo = function(req, res) {
   let toDo = this.toDoHandler.getToDo(req.user.userName, req.body.toDoKey);
-  let allItems = getAllItems(toDo.items);
-  let contents = toHtml(toDo.title, toDo.description, allItems);
+  let contents = toHtml(toDo.title, toDo.description,toDo.items);
   let fileContents = this.fs.readFileSync('public/toDoLists.html', 'utf8');
   fileContents = fileContents.replace('todos', contents);
   this.fs.writeFileSync('public/template.html', fileContents);
   res.end();
 };
 
-handlers.sendTemplate = function(req, res) {
+handlers.sendTemplate =function(req, res) {
   let contents = this.fs.readFileSync('public/template.html', 'utf8');
   res.write(contents);
   res.end();
