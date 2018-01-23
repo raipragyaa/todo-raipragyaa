@@ -117,6 +117,7 @@ let addItems = function(req,handler) {
 handlers.storeToDos = function(req, res) {
   let userContents = JSON.stringify(this.toDoHandler.users, null, 2);
   this.fs.writeFileSync('./database/todo.json', userContents);
+  res.end()
   return;
 };
 

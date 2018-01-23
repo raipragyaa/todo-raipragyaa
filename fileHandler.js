@@ -27,15 +27,15 @@ const serveStaticFiles = function(req, res) {
   }
   let filePath = 'public' + req.url;
   let headers = getContentType(filePath);
-  if(!this.existsSync(filePath)){
-    return respondOnSourceNotFound(req, res);
-  };
-  this.fs.readFileSync(filePath, (err, data) => {
+  if(this.fs.existsSync(filePath)){
+    let data = this.fs.readFileSync(filePath)
     res.statusCode = 200;
     res.setHeader('Content-Type', headers);
     res.write(data);
     res.end();
-  })
+    return ;
+  }
+  return respondOnSourceNotFound(req,res)
 };
 
 

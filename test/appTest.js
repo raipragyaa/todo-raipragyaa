@@ -1,10 +1,12 @@
 let chai = require('chai');
+let ToDoHandler=require('../appModels/toDoHandler.js');
 let assert = chai.assert;
 let request = require('./requestSimulator.js');
 let app = require('../app.js');
 let th = require('./testHelper.js');
 let fs = require('./dummyFs.js');
 app.fs = new fs();
+app.toDoHandler = new ToDoHandler()
 app.registeredUsers = [{
     "userName": "pragya",
     "name": "Pragya Rai"
@@ -27,6 +29,7 @@ describe('app', () => {
   })
   describe('GET /', () => {
     it('serve index', done => {
+      app.fs.addFile('public/index.html','Welcome To To-Do Site')
       request(app, {
         method: 'GET',
         url: '/'
@@ -76,11 +79,14 @@ describe('app', () => {
   })
   describe('GET /login', () => {
     it('serves the login page', done => {
+      app.fs.addFile('public/login.html','userName')
       request(app, {
         method: 'GET',
         url: '/login'
       }, res => {
         th.status_is_ok(res);
+
+
         th.body_contains(res, 'userName');
         th.body_does_not_contain(res, 'login failed');
         th.should_not_have_cookie(res, 'message');

@@ -1,4 +1,4 @@
-class mockFileSystem {
+class MockFileSystem {
   constructor() {
     this.files = {};
   }
@@ -12,7 +12,7 @@ class mockFileSystem {
     this.files[file]+=content;
   }
   readFileSync(file,encoding){
-    if(!this.files[file]){
+    if(this.files[file]){
       return this.files[file]
     }
     throw new Error('file not found')
@@ -22,11 +22,11 @@ class mockFileSystem {
     if(!this.files[file]){
       error = new Error('file not found')
     }
-    callback(this.files[file],error)
+    callback(error,this.files[file])
   }
   writeFileSync(file,content){
     this.files[file]=content;
   }
 }
 
-module.exports=mockFileSystem;
+module.exports=MockFileSystem;
