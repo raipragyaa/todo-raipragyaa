@@ -17,7 +17,7 @@ ToDo.prototype = {
     this.itemKey++;
   },
   deleteItem: function(itemKey) {
-    return delete this.items[itemKey];
+    delete this.items[itemKey];
   },
   getItem: function(itemKey) {
     return this.items[itemKey];

@@ -20,5 +20,9 @@
     "chai": "^4.1.2",
     "mocha": "^4.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2"
+  }
 }

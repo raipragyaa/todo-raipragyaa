@@ -1,9 +1,16 @@
 class ToDoHandler {
   constructor(users = {}) {
     this.users = users;
+    this.currentToDoKey=0
   }
   getUsers() {
     return this.users;
+  }
+  setToDoAsCurrent(toDoKey){
+    this.currentToDoKey=toDoKey;
+  }
+  getCurrentToDoKey(){
+    return this.currentToDoKey;
   }
   doesUserExsist(userName) {
     return userName in this.users;
