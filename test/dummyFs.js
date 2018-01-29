@@ -15,7 +15,7 @@ class MockFileSystem {
     if(this.files[file]){
       return this.files[file]
     }
-    throw new Error('file not found')
+    throw new Error(`file not found ${file}`)
   }
   writeFileSync(file,content){
     this.files[file]=content;

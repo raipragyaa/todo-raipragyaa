@@ -17,7 +17,6 @@ const createDisplayElements = function(div,count,title,btnId){
 };
 
 const showTodos = function() {
-  console.log(this.responseText);
   let todoTitlesWithId = JSON.parse(this.responseText);
   let todosDiv = document.getElementById("todos");
   let counter = 0;
@@ -39,6 +38,7 @@ let displayTitles = function() {
 const deleteToDo = function(){
   let req = new XMLHttpRequest();
   req.open('POST',"/deleteTodo");
+  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   req.send(`toDoKey=${event.target.id}`)
   window.location.reload();
 };

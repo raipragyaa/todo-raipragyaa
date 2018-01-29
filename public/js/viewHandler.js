@@ -5,12 +5,14 @@ const deleteItem = function(){
   parent.removeChild(child);
   let req = new XMLHttpRequest();
   req.open('POST',"/deleteItem");
+  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   req.send(`itemKey=${id}`)
 }
 
 const viewToDo = function(){
   let req = new XMLHttpRequest();
-  req.open("POST",'/viewTodo');
+  req.open("POST",'/viewSelectedTodo');
+  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   req.send(`toDoKey=${event.target.id}`);
   location.href = '/displayToDo';
 };

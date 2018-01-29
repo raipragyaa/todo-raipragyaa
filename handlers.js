@@ -15,7 +15,7 @@ handlers.logRequest = function(req,res,next) {
   ].join('\n');
   this.fs.appendFile('request.log', text, () => {});
   console.log(`${req.method} ${req.url}`);
-  next()
+  next();
 };
 
 
@@ -25,8 +25,7 @@ handlers.loadUser = function(req, res,next) {
   if (sessionid && user) {
     req.user = user;
   }
-  next()
-  return;
+  next();
 };
 
 handlers.serveHome = function(req, res,next) {
@@ -34,11 +33,9 @@ handlers.serveHome = function(req, res,next) {
   let userName = req.user.userName;
   contents = contents.replace('Name', userName);
   res.send(contents);
-  next()
 };
 
-let addUserIfNotExsist = function(req,handler) {
-  let user = req.body.userName;
+let addUserIfNotExsist = function(user,handler) {
   if (!handler.doesUserExsist(user)) {
     let newUser = new User(user);
     handler.addUser(newUser);
@@ -49,44 +46,47 @@ let addUserIfNotExsist = function(req,handler) {
 handlers.loginUser = function(req, res,next) {
   let user = this.registeredUsers.find(u => u.userName == req.body.userName);
   if (!user) {
-    res.cookie('message','loginfailed', { maxAge: 5, httpOnly: true })
+    res.cookie('message','loginfailed', { httpOnly: true })
     res.redirect('/login');
     return;
   }
-  addUserIfNotExsist(req,this.toDoHandler);
+  addUserIfNotExsist(req.body.userName,this.toDoHandler);
   let sessionid = new Date().getTime();
   res.cookie('sessionid',sessionid)
   user.sessionid = sessionid;
   user.userName = req.body.userName;
   res.redirect('/home');
-  next()
+  next();
 };
 
 handlers.serveIndexIfNotLoggedIn = function(req, res,next) {
   if (['/deleteTodo', '/todoLists', '/saveToDo', '/viewTodo', '/home', '/todoCreation', '/toDos'].includes(req.url) && !req.user) {
-    res.redirect('/index.html');
+    res.redirect('/');
+    return;
   }
-  next()
+  next();
 };
 
 handlers.redirectLoggedInUserToHome = (req,res,next)=>{
-  if(['/','/login'].includes(req.url) && req.user) res.redirect('/home');
-  next()
+  if(['/','/login'].includes(req.url) && req.user) {
+    res.redirect('/home');
+    return;
+  }
+  next();
 }
 
-handlers.serveLoginPage = function(req, res,next) {
+handlers.serveLoginPage = function(req, res) {
   let contents = this.fs.readFileSync('public/login.html', 'utf8');
   if (req.cookies.message) {
+    res.clearCookie("message");
     contents += 'Login Failed';
   }
   res.send(contents);
-  next()
 };
 
-handlers.logoutUser = function(req, res,next) {
-  res.cookie('sessionid','', { maxAge: 1, httpOnly: true })
+handlers.logoutUser = function(req, res) {
+  res.clearCookie("sessionid");
   res.redirect('/');
-  next()
 };
 
 let addToDo = function(req,handler) {
@@ -97,18 +97,16 @@ let addToDo = function(req,handler) {
   handler.addToDos(userName, toDo);
 };
 
-handlers.serveToDoCreationPage = function(req, res,next) {
+handlers.serveToDoCreationPage = function(req, res) {
   let contents = this.fs.readFileSync('public/toDoCreation.html', 'utf8');
   contents = contents.replace('title of list', req.body.title);
   contents = contents.replace('toDo description', req.body.description);
   addToDo(req,this.toDoHandler);
   res.send(contents);
-  next()
 };
 
-handlers.serveLandingPage=function(req,res,next){
+handlers.serveLandingPage=function(req,res){
   res.redirect('/index.html');
-  next();
 }
 
 let addItems = function(req,handler) {
@@ -129,13 +127,12 @@ handlers.storeToDos = function(req, res,next) {
   let userContents = JSON.stringify(this.toDoHandler.users, null, 2);
   this.fs.writeFileSync('./database/todo.json', userContents);
   next();
-  return;
 };
 
 handlers.redirectHomeAfterSavingTodo = function(req, res,next) {
   addItems(req,this.toDoHandler);
   res.redirect('/home');
-  next()
+  next();
 };
 
 handlers.displayTitlesInHome = function(req, res,next) {
@@ -147,7 +144,7 @@ handlers.displayTitlesInHome = function(req, res,next) {
     return object;
   }, {});
   res.send(JSON.stringify(titles));
-  next()
+  next();
 };
 
 handlers.deleteToDo = function(req, res,next) {
@@ -199,20 +196,19 @@ handlers.viewToDo = function(req, res,next) {
   let fileContents = this.fs.readFileSync('public/toDoLists.html', 'utf8');
   fileContents = fileContents.replace('todos', contents);
   this.fs.writeFileSync('public/template.html', fileContents);
-  next()
+  next();
 };
 
 handlers.sendTemplate =function(req, res,next) {
   let contents = this.fs.readFileSync('public/template.html', 'utf8');
   res.send(contents);
-  next()
+  next();
 };
 
-handlers.deleteItem=function(req,res){
+handlers.deleteItem=function(req,res,next){
   let toDoKey = this.toDoHandler.getCurrentToDoKey()
-  this.toDoHandler.deleteItem(req.user.userName,toDoKey,req.body.itemKey)
-
-  next()
+  this.toDoHandler.deleteItem(req.user.userName,toDoKey,req.body.itemKey);
+  next();
 }
 
 module.exports = handlers;
