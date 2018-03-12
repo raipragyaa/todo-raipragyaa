@@ -1,5 +1,5 @@
 const http = require('http');
-const PORT = 8000;
+const PORT = process.env.PORT||8000;
 const app = require('./app.js');
 const fs = require('fs');
 const Item = require('./appModels/item.js');
